@@ -1,5 +1,5 @@
 // Server-side strings (weather descriptions, Airbnb titles, wind labels). Default language: en.
-export const LANGS = ['es', 'en', 'pt', 'nl', 'da', 'pl'];
+export const LANGS = ['es', 'en', 'pt', 'nl', 'da', 'pl', 'de'];
 export const lang = (l) => (LANGS.includes(l) ? l : 'en');
 
 // WMO weather interpretation codes (Open-Meteo; 68 and 69 for the other providers' sleet).
