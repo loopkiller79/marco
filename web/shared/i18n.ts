@@ -1,10 +1,10 @@
 // i18n + date helpers shared by the display and the admin panel (es default, en, pt, nl, da, pl).
 import type { DateFormat, Lang } from './types';
 
-export const LANGS: Lang[] = ['es', 'en', 'pt', 'nl', 'da', 'pl'];
-export const LOCALES: Record<Lang, string> = { es: 'es-ES', en: 'en-GB', pt: 'pt-PT', nl: 'nl-NL', da: 'da-DK', pl: 'pl-PL' };
+export const LANGS: Lang[] = ['es', 'en', 'pt', 'nl', 'da', 'pl', 'de'];
+export const LOCALES: Record<Lang, string> = { es: 'es-ES', en: 'en-GB', pt: 'pt-PT', nl: 'nl-NL', da: 'da-DK', pl: 'pl-PL', de: 'de_DE' };
 /** Each language's own name, for language pickers. */
-export const LANG_NAMES: Record<Lang, string> = { es: 'Español', en: 'English', pt: 'Português', nl: 'Nederlands', da: 'Dansk', pl: 'Polski' };
+export const LANG_NAMES: Record<Lang, string> = { es: 'Español', en: 'English', pt: 'Português', nl: 'Nederlands', da: 'Dansk', pl: 'Polski', de: 'Deutsch' };
 
 type Dict = Record<string, string>;
 
