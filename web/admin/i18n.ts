@@ -24,6 +24,7 @@ const MORE: Partial<Record<Lang, { rows: Record<string, string>[]; one: Record<s
   nl: { rows: [NL, NL_FAMILY], one: [NL_SINGULAR, NL_SINGULAR_FAMILY] },
   da: { rows: [DA, DA_FAMILY], one: [DA_SINGULAR, DA_SINGULAR_FAMILY] },
   pl: { rows: [PL, PL_FAMILY], one: [PL_SINGULAR, PL_SINGULAR_FAMILY], few: [PL_FEW, PL_FEW_FAMILY] },
+  de: { rows: [DE, DE_FAMILY], one: [DE_SINGULAR, DE_SINGULAR_FAMILY] },
 };
 
 let plRules: Intl.PluralRules | null = null;
