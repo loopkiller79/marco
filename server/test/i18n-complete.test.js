@@ -135,7 +135,7 @@ test('display: every key in Dutch, Danish, Polish and German with the same place
 
 test('dates: long date line as German writes it; Monday first; decimal comma', ts, () => {
   const f = (lang, fmt) => shared.formatDateLine(lang, '2026-10-12', fmt);
-  assert.equal(f('de', 'weekday_d_month'), 'Montag, 9. Oktober' /* bzw. entsprechender Testwert */);
+  assert.equal(f('de', 'weekday_d_month'), 'Montag, 12. Oktober');
   assert.deepEqual(shared.weekdayNames('de', 1).slice(0, 2), ['Mo', 'Di']);
   assert.equal(shared.monthName('de', 3), 'März');
   assert.equal((1234.5).toLocaleString(shared.LOCALES.de), '1.234,5');
