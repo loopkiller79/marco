@@ -1,14 +1,13 @@
 // Two-step sign-in (components/TwoFactor.tsx, the sign-in page, activity entries). Spanish key; [es, en, pt, nl, da].
 // ROWS_TWOFA feeds EN and PT (i18n-dict.ts); NL_TWOFA and DA_TWOFA are spread into NL and DA.
-const ROWS: [string, string, string, string, string][] = [
-  export const DE_TWOFA: Record<string, string> = {
+export const DE_TWOFA: Record<string, string> = {
   'A partir de ahora, al entrar se pedirá el código de la app. Las sesiones abiertas siguen abiertas.': 'Ab sofort wird beim Anmelden nach dem Code aus der App gefragt. Bereits geöffnete Sitzungen bleiben aktiv.',
-  'Abre tu app de autenticación (Google Authenticator, Microsoft Authenticator, 1Password, Aegis…) y añade una cuenta nueva.': 'Öffne deine Authentifizierungs-App (Google Authenticator, Microsoft Authenticator, 1Password, Aegis …) und füge ein neues Konto hinzu.',
+  'Abre tu app de autenticación (Google Authenticator, Microsoft Authenticator, 1Password, Aegis…) y añade una cuenta nueva.': 'Öffne deine Authentifizierungs-App (Google Authenticator, Microsoft Authenticator, 1Password, Aegis…) und füge ein neues Konto hinzu.',
   'Activada': 'Aktiviert',
   'Activada {when}': 'Aktiviert {when}',
   'Activar': 'Aktivieren',
   'Activar la verificación en dos pasos': 'Bestätigung in zwei Schritten aktivieren',
-  'Además de la contraseña, al entrar se pide un código de una app de autenticación del móvil.': 'Zusätzlich zum Passwort wird beim Anmelden ein Code aus einer Authentifizierungs-App auf dem Handy abgefragt.',
+  'Además de la contraseña, al entrar se pide un código de una app de autenticación del móvil.': 'Zusätzlich zum Passwort wird beim Anmelden ein Code aus einer Authentifizierungs-App auf deinem Handy abgefragt.',
   'Clave': 'Schlüssel',
   'Confirma tu contraseña': 'Bestätige dein Passwort',
   'Crear códigos nuevos': 'Neue Codes erstellen',
@@ -22,18 +21,18 @@ const ROWS: [string, string, string, string, string][] = [
   'Códigos de recuperación de Marco': 'Marco-Wiederherstellungscodes',
   'Desactivada': 'Deaktiviert',
   'Desactivar la verificación en dos pasos': 'Bestätigung in zwei Schritten deaktivieren',
-  'El código no es correcto. Comprueba que la hora del móvil está bien y prueba con el siguiente.': 'Dieser Code stimmt nicht. Prüfe, ob die Uhrzeit auf deinem Handy korrekt ist, und versuche es mit dem nächsten.',
-  'Escanea este código QR. Si no puedes, escribe la clave a mano.': 'Scanne diesen QR-Code. Falls das nicht geht, gib den Schlüssel von Hand ein.',
+  'El código no es correcto. Comprueba que la hora del móvil está bien y prueba con el siguiente.': 'Dieser Code stimmt nicht. Prüfe, ob die Uhrzeit auf deinem Handy korrekt eingestellt ist, und versuche es mit dem nächsten.',
+  'Escanea este código QR. Si no puedes, escribe la clave a mano.': 'Scanne diesen QR-Code. Falls das nicht klappt, gib den Schlüssel von Hand ein.',
   'Escribe el código de 6 cifras de tu app de autenticación.': 'Gib den 6-stelligen Code aus deiner Authentifizierungs-App ein.',
   'Escribe el código de 6 cifras que muestra la app.': 'Gib den 6-stelligen Code ein, den die App anzeigt.',
   'Escribe uno de tus códigos de recuperación.': 'Gib einen deiner Wiederherstellungscodes ein.',
-  'Guárdalos en un sitio seguro. Cada uno sirve una sola vez para entrar si no tienes el móvil a mano. No los volverás a ver.': 'Bewahre sie an einem sicheren Ort auf. Jeder Code funktioniert einmalig zum Anmelden, wenn du dein Handy nicht zur Hand hast. Du wirst sie nicht noch einmal sehen.',
+  'Guárdalos en un sitio seguro. Cada uno sirve una sola vez para entrar si no tienes el móvil a mano. No los volverás a ver.': 'Bewahre sie an einem sicheren Ort auf. Jeder Code funktioniert einmalig zum Anmelden, wenn du dein Handy nicht griffbereit hast. Du wirst sie nicht noch einmal sehen.',
   'Ha pasado demasiado tiempo o ha habido demasiados intentos. Vuelve a escribir la contraseña.': 'Es ist zu viel Zeit vergangen oder es gab zu viele Versuche. Gib dein Passwort erneut ein.',
-  'La configuración ha caducado. Empieza otra vez.': 'Die Einrichtung ist abgelaufen. Beginne noch einmal von vorn.',
-  'Los códigos anteriores ya no sirven.': 'Die bisherigen Codes funktionieren nicht mehr.',
+  'La configuración ha caducado. Empieza otra vez.': 'Die Einrichtung ist abgelaufen. Bitte beginne noch einmal.',
+  'Los códigos anteriores ya no sirven.': 'Die bisherigen Codes sind nicht mehr gültig.',
   'No se pudo copiar': 'Kopieren fehlgeschlagen',
   'Nuevos códigos de recuperación': 'Neue Wiederherstellungscodes',
-  'Por seguridad, cierra la sesión y vuelve a entrar antes de cambiar esto.': 'Melde dich aus Sicherheitsgründen ab und wieder an, bevor du dies änderst.',
+  'Por seguridad, cierra la sesión y vuelve a entrar antes de cambiar esto.': 'Melde dich zu deiner Sicherheit ab und wieder an, bevor du dies änderst.',
   'Queda 1 código de recuperación': 'Noch 1 Wiederherstellungscode übrig',
   'Quedan {n} códigos de recuperación': 'Noch {n} Wiederherstellungscodes übrig',
   'Si pierdes el móvil, entra con uno de tus códigos de recuperación.': 'Wenn du dein Handy verlierst, melde dich mit einem deiner Wiederherstellungscodes an.',
@@ -44,11 +43,11 @@ const ROWS: [string, string, string, string, string][] = [
   'Verificación en dos pasos': 'Bestätigung in zwei Schritten',
   'Verificación en dos pasos activada': 'Bestätigung in zwei Schritten aktiviert',
   'Verificación en dos pasos desactivada': 'Bestätigung in zwei Schritten deaktiviert',
-  'Verificar': 'Überprüfen',
+  'Verificar': 'Bestätigen',
   'Ya los he guardado': 'Ich habe sie gespeichert',
   'con un código de recuperación': 'mit einem Wiederherstellungscode',
   'con verificación en dos pasos': 'mit Bestätigung in zwei Schritten',
-];
+};
 
 export const ROWS_TWOFA: [string, string, string][] = ROWS.map(([es, en, pt]) => [es, en, pt]);
 export const NL_TWOFA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[3]]));
