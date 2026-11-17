@@ -33,6 +33,8 @@ export const DE: Record<string, string> = {
   ...DE_GROUP,
   ...DE_PHOTOSOURCE,
   ...DE_VCARD,
+  'Mes y año arriba': 'Monat und Jahr oben',
+  'Sin ellos, el calendario ocupa toda la tarjeta.': 'Ohne sie nimmt der Kalender die gesamte Karte ein.',
   '(ninguno)': '(keine)',
   'Estás usando la contraseña inicial. Cámbiala: hasta entonces solo se acepta desde tu red local.': 'Du verwendest das Startpasswort. Ändere es: Bis dahin wird es nur aus deinem lokalen Netzwerk akzeptiert.',
   'Sesiones': 'Sitzungen',
