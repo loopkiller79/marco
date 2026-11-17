@@ -2456,8 +2456,6 @@ const de: Dict = {
 
 export const DICTS: Record<Lang, Dict> = { es, en, pt, nl, da, pl, de };
 
-export const DICTS: Record<Lang, Dict> = { es, en, pt, nl, da, pl };
-
 export function normLang(l: string | undefined | null): Lang {
   return LANGS.includes(l as Lang) ? (l as Lang) : 'en';
 }
