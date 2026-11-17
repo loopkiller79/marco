@@ -5,6 +5,7 @@ import { LANGS, LOCALES } from '../shared/i18n';
 import { NL, NL_SINGULAR } from './i18n-dict-nl';
 import { DA, DA_SINGULAR } from './i18n-dict-da';
 import { PL, PL_FEW, PL_SINGULAR } from './i18n-dict-pl';
+import { DE, DE_SINGULAR } from './i18n-dict-de';
 import {
   DA_FAMILY, DA_SINGULAR_FAMILY, NL_FAMILY, NL_SINGULAR_FAMILY, PL_FAMILY, PL_FEW_FAMILY, PL_SINGULAR_FAMILY,
 } from './i18n-dict-family';
