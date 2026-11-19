@@ -283,3 +283,208 @@ export const ROWS_ACCESS: [string, string, string][] = ROWS_ACCESS_ALL.map(([es,
 export const NL_ACCESS: Record<string, string> = Object.fromEntries(ROWS_ACCESS_ALL.map((r) => [r[0], r[3]]));
 export const DA_ACCESS: Record<string, string> = Object.fromEntries(ROWS_ACCESS_ALL.map((r) => [r[0], r[4]]));
 export const PL_ACCESS: Record<string, string> = Object.fromEntries(ROWS_ACCESS_ALL.map((r) => [r[0], r[5]]));
+
+export const DE_ACCESS: Record<string, string> = {
+  'Accesos de la familia': 'Familienzugriff',
+  'Cada persona tiene su propio panel en el móvil, sin la contraseña del panel. Tú eliges qué puede hacer cada una y puedes quitarle el acceso cuando quieras.':
+    'Jede Person erhält ihr eigenes Dashboard auf dem Smartphone, ohne das Admin-Passwort. Du legst fest, was jede Person tun darf, und kannst den Zugriff jederzeit wieder entziehen.',
+  'Añadir persona': 'Person hinzufügen',
+  'Nadie tiene acceso todavía': 'Noch niemand hat Zugriff',
+  'Añade a una persona, elige qué puede hacer y envíale su enlace, o muéstrale un código en una pantalla.':
+    'Füge eine Person hinzu, wähle aus, was sie tun darf, und sende ihr ihren Link oder zeige ihr einen Code auf einem Bildschirm.',
+  'Lo que permitas se comprueba en el servidor en cada acción. Nadie con este acceso entra en el panel, ni ve calendarios, fotos o contraseñas.':
+    'Was du erlaubst, wird bei jeder Aktion auf dem Server geprüft. Niemand mit diesem Zugriff gelangt in die Verwaltung oder sieht Kalender, Fotos oder Passwörter.',
+  'Esa pantalla no está conectada ahora: el código saldrá si se conecta en los próximos 2 minutos.':
+    'Dieser Bildschirm ist derzeit nicht verbunden: Der Code erscheint, wenn er sich in den nächsten 2 Minuten verbindet.',
+  'Los códigos solo salen en pantallas abiertas con su enlace privado o vinculadas, no en las que usan el modo abierto.':
+    'Codes erscheinen nur auf Bildschirmen, die mit ihrem privaten Link geöffnet oder gekoppelt wurden, nicht auf Bildschirmen im offenen Modus.',
+  '¿Crear un enlace nuevo?': 'Neuen Link erstellen?',
+  'El enlace actual deja de funcionar. Los móviles que ya entraron siguen funcionando.':
+    'Der aktuelle Link funktioniert nicht mehr. Smartphones, die bereits angemeldet sind, funktionieren weiterhin.',
+  'Crear enlace nuevo': 'Neuen Link erstellen',
+  '¿Quitar el acceso a {name}?': 'Zugriff für {name} entfernen?',
+  'Ese móvil deja de funcionar al momento.':
+    'Dieses Smartphone funktioniert sofort nicht mehr.',
+  'Quitar acceso': 'Zugriff entfernen',
+  '¿Quitar a {name}?': '{name} entfernen?',
+  'Su enlace, sus móviles y cualquier código dejan de funcionar al momento.':
+    'Ihr Link, ihre Smartphones und jeder Code funktionieren sofort nicht mehr.',
+  'Quitar persona': 'Person entfernen',
+  'Acceso quitado': 'Zugriff entfernt',
+  'Usado {when}': 'Verwendet {when}',
+  'Sin usar todavía': 'Noch nicht verwendet',
+  'Sin permisos todavía': 'Noch keine Berechtigungen',
+  'Editar': 'Bearbeiten',
+  'Código QR del enlace de {name}': 'QR-Code des Links für {name}',
+  'Enlace privado de {name}': 'Privater Link für {name}',
+  'Cópialo ahora: por seguridad solo se muestra esta vez. Si lo pierdes, crea uno nuevo.':
+    'Kopiere ihn jetzt: Aus Sicherheitsgründen wird er nur dieses eine Mal angezeigt. Wenn du ihn verlierst, erstelle einen neuen.',
+  'Hecho': 'Fertig',
+  'Mostrar un código': 'Code anzeigen',
+  'Crear un enlace nuevo': 'Einen neuen Link erstellen',
+  'Crear enlace': 'Link erstellen',
+  'En la pantalla durante {s} s. Que lo escriba en {url}':
+    'Auf dem Bildschirm für {s} Sek. Auf {url} eingeben',
+  'Enlace creado {when}': 'Link erstellt {when}',
+  'con un código': 'mit einem Code',
+  'con el enlace': 'mit dem Link',
+  'visto {when}': 'gesehen {when}',
+  'Escribe un nombre.': 'Gib einen Namen ein.',
+  'Editar acceso de {name}': 'Zugriff für {name} bearbeiten',
+  'Cancelar': 'Abbrechen',
+  'Guardar': 'Speichern',
+  'Añadir y crear su enlace': 'Hinzufügen und Link erstellen',
+  'Nombre': 'Name',
+  'Por ejemplo: Ana': 'Zum Beispiel: Ana',
+  'Es de la familia': 'Familienmitglied',
+  'Su móvil usa su avatar y su color.':
+    'Das Smartphone verwendet Avatar und Farbe dieser Person.',
+  '(ninguno)': '(keine)',
+  'Qué puede hacer esta persona': 'Was diese Person tun darf',
+  'Pantallas': 'Bildschirme',
+  'Todas las pantallas': 'Alle Bildschirme',
+  'Enviar mensajes a las pantallas': 'Nachrichten an die Bildschirme senden',
+  'Salen como un aviso con su nombre, durante el tiempo que elija.':
+    'Erscheinen als Hinweis mit ihrem Namen für die gewählte Dauer.',
+  'Activar y quitar el modo privado': 'Privatmodus ein- und ausschalten',
+  'En todas las pantallas a la vez.': 'Auf allen Bildschirmen gleichzeitig.',
+  'En todas las pantallas o en una sola, desde su móvil.':
+    'Auf allen Bildschirmen oder auf einem einzelnen vom eigenen Smartphone aus.',
+  'Cambiar entre noche, día y automático':
+    'Zwischen Nacht, Tag und Automatisch wechseln',
+  'Añadir tareas': 'Aufgaben hinzufügen',
+  'A la lista de tareas de casa.': 'Zur Aufgabenliste des Haushalts.',
+  'Añadir eventos al calendario local':
+    'Termine zum lokalen Kalender hinzufügen',
+  'Con fecha, todo el día o con hora.':
+    'Mit Datum, ganztägig oder mit Uhrzeit.',
+  'Guarda los cambios de Familia antes de elegir a esa persona.':
+    'Speichere die Änderungen unter Familie, bevor du diese Person auswählst.',
+  'Has llegado al máximo de personas.':
+    'Du hast die maximale Anzahl an Personen erreicht.',
+  'Guarda la pantalla antes de mostrar un código en ella.':
+    'Speichere den Bildschirm, bevor du einen Code darauf anzeigst.',
+  'Demasiados códigos seguidos. Espera unos minutos.':
+    'Zu viele Codes hintereinander. Warte ein paar Minuten.',
+  'Ya no existe.': 'Existiert nicht mehr.',
+  'Mensajes': 'Nachrichten',
+  'Modo privado': 'Privatmodus',
+  'Noche y día': 'Nacht und Tag',
+  'Tareas': 'Aufgaben',
+  'Eventos': 'Termine',
+  'Error': 'Fehler',
+  'Acceso creado para {person}': 'Zugriff erstellt für {person}',
+  'Enlace nuevo para {person}': 'Neuer Link für {person}',
+  'Acceso de {person} quitado': 'Zugriff von {person} entfernt',
+  '{person} salió en un móvil ({device})':
+    '{person} hat sich auf einem Smartphone abgemeldet ({device})',
+  'Móvil de {person} quitado ({device})':
+    'Smartphone von {person} entfernt ({device})',
+  'Acceso de {person} cambiado': 'Zugriff von {person} geändert',
+  '{person} entró en un móvil nuevo ({device})':
+    '{person} hat sich auf einem neuen Smartphone angemeldet ({device})',
+  'Código para {person} en la pantalla {screen}':
+    'Code für {person} auf dem Bildschirm {screen}',
+  'Enlace de acceso no válido': 'Ungültiger Zugriffslink',
+  'Un móvil sin acceso lo intentó':
+    'Ein Smartphone ohne Zugriff hat es versucht',
+  'Código de acceso no válido': 'Ungültiger Zugriffscode',
+  'Mensaje de {person}: {text}': 'Nachricht von {person}: {text}',
+  'Modo privado activado por {person}':
+    'Privatmodus eingeschaltet von {person}',
+  'Modo privado quitado por {person}':
+    'Privatmodus ausgeschaltet von {person}',
+  'Modo noche activado por {person}': 'Nachtmodus eingeschaltet von {person}',
+  'Modo día activado por {person}': 'Tagmodus eingeschaltet von {person}',
+  'Modo automático activado por {person}':
+    'Automatikmodus eingeschaltet von {person}',
+  'Tarea añadida por {person}: {text}':
+    'Aufgabe hinzugefügt von {person}: {text}',
+  'Evento añadido por {person}: {title}':
+    'Termin hinzugefügt von {person}: {title}',
+  '{name} (su móvil)': '{name} (eigenes Smartphone)',
+  '{n} min': '{n} Min.',
+  '{n} h': '{n} Std.',
+  'Mensaje enviado': 'Nachricht gesendet',
+  'Mensaje a las pantallas': 'Nachricht an die Bildschirme',
+  'Por ejemplo: la cena está lista': 'Zum Beispiel: Das Abendessen ist fertig',
+  'Mensaje': 'Nachricht',
+  'Todas': 'Alle',
+  'Cuánto tiempo': 'Wie lange',
+  'Enviando…': 'Wird gesendet…',
+  'Enviar': 'Senden',
+  'Modo privado activado': 'Privatmodus ein',
+  'Modo privado desactivado': 'Privatmodus aus',
+  'Ahora no hay ninguna pantalla en modo privado.':
+    'Derzeit befindet sich kein Bildschirm im Privatmodus.',
+  'Todas las pantallas están en modo privado.':
+    'Alle Bildschirme befinden sich im Privatmodus.',
+  '{on} de {total} pantallas en modo privado.':
+    '{on} von {total} Bildschirmen im Privatmodus.',
+  'Activar': 'Einschalten',
+  'Desactivar': 'Ausschalten',
+  'Pantallas en modo noche': 'Bildschirme im Nachtmodus',
+  'Pantallas en modo día': 'Bildschirme im Tagmodus',
+  'Pantallas en modo automático': 'Bildschirme im Automatikmodus',
+  '{screen}: modo noche': '{screen}: Nachtmodus',
+  '{screen}: modo día': '{screen}: Tagmodus',
+  '{screen}: modo automático': '{screen}: Automatikmodus',
+  'En la pantalla {screen}.': 'Auf dem Bildschirm {screen}.',
+  'Noche o día': 'Nacht oder Tag',
+  'Noche': 'Nacht',
+  'Día': 'Tag',
+  'Auto': 'Auto',
+  'Tarea añadida': 'Aufgabe hinzugefügt',
+  'Nueva tarea': 'Neue Aufgabe',
+  'Ej.: comprar pan': 'Z. B. Brot kaufen',
+  'Tarea': 'Aufgabe',
+  'Añadir': 'Hinzufügen',
+  'Evento añadido: {when}': 'Termin hinzugefügt: {when}',
+  'Nuevo evento': 'Neuer Termin',
+  'Ya hay demasiados avisos en las pantallas. Prueba dentro de un rato.':
+    'Auf den Bildschirmen sind derzeit zu viele Hinweise aktiv. Versuche es in einer Weile erneut.',
+  'El calendario local está apagado.': 'Der lokale Kalender ist ausgeschaltet.',
+  'Por ejemplo: dentista': 'Zum Beispiel: Zahnarzt',
+  'Título': 'Titel',
+  'Fecha': 'Datum',
+  'Todo el día': 'Ganztägig',
+  'Empieza': 'Beginnt',
+  'Termina': 'Endet',
+  'Añadir al calendario': 'Zum Kalender hinzufügen',
+  'Tu panel de la familia': 'Dein Familien-Dashboard',
+  'Pide que muestren tu código en una de las pantallas de casa y escríbelo aquí. También puedes abrir tu enlace privado.':
+    'Bitte darum, deinen Code auf einem der Bildschirme zu Hause anzuzeigen, und gib ihn hier ein. Du kannst auch deinen privaten Link öffnen.',
+  'Código': 'Code',
+  'Comprobando…': 'Wird geprüft…',
+  'Entrar': 'Anmelden',
+  'Hola, {name}': 'Hallo, {name}',
+  'Todavía no tienes nada que controlar desde aquí. Pide que te den permisos en el panel.':
+    'Du hast hier noch nichts zu steuern. Bitte darum, dir in der Verwaltung Berechtigungen zu erteilen.',
+  'Salir en este móvil': 'Auf diesem Smartphone abmelden',
+  'Este móvil ya no tiene acceso. Pide un código nuevo.':
+    'Dieses Smartphone hat keinen Zugriff mehr. Bitte um einen neuen Code.',
+  '¿Salir en este móvil? Para volver a entrar necesitarás tu enlace o un código nuevo.':
+    'Auf diesem Smartphone abmelden? Um dich wieder anzumelden, benötigst du deinen Link oder einen neuen Code.',
+  'Sin conexión. Comprueba la red e inténtalo otra vez.':
+    'Keine Verbindung. Prüfe das Netzwerk und versuche es erneut.',
+  'Demasiados intentos. Espera un poco y vuelve a probar.':
+    'Zu viele Versuche. Warte kurz und versuche es erneut.',
+  'Ya no tienes permiso para esto.': 'Du hast dafür keine Berechtigung mehr.',
+  'Ese código no vale o ya ha caducado. Pide uno nuevo.':
+    'Dieser Code ist ungültig oder abgelaufen. Bitte um einen neuen.',
+  'Este enlace ya no funciona. Pide uno nuevo.':
+    'Dieser Link funktioniert nicht mehr. Bitte um einen neuen.',
+  'Ya hay demasiados móviles con tu acceso. Pide que quiten alguno.':
+    'Es sind bereits zu viele Smartphones mit deinem Zugriff verbunden. Bitte darum, eines zu entfernen.',
+  'Escribe algo primero.': 'Gib zuerst etwas ein.',
+  'Es demasiado largo.': 'Ist zu lang.',
+  'Escribe un título.': 'Gib einen Titel ein.',
+  'El título es demasiado largo.': 'Der Titel ist zu lang.',
+  'Elige una fecha válida.': 'Wähle ein gültiges Datum.',
+  'Revisa las horas: el final va después del inicio.':
+    'Prüfe die Uhrzeiten: Das Ende muss nach dem Beginn liegen.',
+  'La lista de tareas está llena.': 'Die Aufgabenliste ist voll.',
+  'El calendario local está lleno.': 'Der lokale Kalender ist voll.',
+  'No se pudo hacer. Inténtalo otra vez.':
+    'Das hat nicht geklappt. Versuche es erneut.',
+};
