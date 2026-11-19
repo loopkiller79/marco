@@ -171,3 +171,4 @@ export const ROWS_ACCESS: [string, string, string][] = ROWS_ACCESS_ALL.map(([es,
 export const NL_ACCESS: Record<string, string> = Object.fromEntries(ROWS_ACCESS_ALL.map((r) => [r[0], r[3]]));
 export const DA_ACCESS: Record<string, string> = Object.fromEntries(ROWS_ACCESS_ALL.map((r) => [r[0], r[4]]));
 export const PL_ACCESS: Record<string, string> = Object.fromEntries(ROWS_ACCESS_ALL.map((r) => [r[0], r[5]]));
+export const ROWS_ACCESS_ALL = ROWS;
