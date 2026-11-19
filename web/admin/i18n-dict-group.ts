@@ -1,73 +1,487 @@
 // A "Grupo" on its own in the builder (#25), the "Icono" of a Home Assistant card (#26) and an Entidad's second sensor (#28), the Bolsa card's currency and labels, the calendar's grid lines (#29), past events (#32), manual calendar downloads (#37), the days a calendar grid shows (#39) and what night mode does (#38), the photo card behind the cards and in the sidebar (#36, #41). Admin text keyed by the
 // Spanish string t() takes. Each row is [es, en, pt, nl, da, pl]. ROWS_GROUP feeds EN and PT (i18n-dict.ts); NL_GROUP, DA_GROUP and PL_GROUP are spread into
 // NL, DA and PL.
-const DE_GROUP_BASE: Record<string, string> = {
-  'De 2 a 4 tarjetas en el hueco de una, en filas o en columnas.': '2 bis 4 Karten auf dem Platz einer einzigen, in Zeilen oder Spalten.',
-  'Las tarjetas de un grupo solo se ven: no se pueden tocar en la pantalla.': 'Die Karten einer Gruppe dienen nur zur Anzeige: Sie können auf dem Bildschirm nicht angetippt werden.',
-  'Auto: según lo que es. Una batería muestra cuánta carga le queda.': 'Auto: je nach Typ. Ein Akku zeigt an, wie viel Ladung noch übrig ist.',
+const ROWS: [string, string, string, string, string, string][] = [
+  [
+    'De 2 a 4 tarjetas en el hueco de una, en filas o en columnas.',
+    '2 to 4 cards in the space of one, in rows or in columns.',
+    'De 2 a 4 cartões no espaço de um, em linhas ou em colunas.',
+    '2 tot 4 kaarten op de plek van één, in rijen of in kolommen.',
+    '2 til 4 kort på pladsen til ét, i rækker eller i kolonner.',
+    'Od 2 do 4 kart w miejscu jednej, w wierszach lub w kolumnach.',
+  ],
+  [
+    'Las tarjetas de un grupo solo se ven: no se pueden tocar en la pantalla.',
+    'The cards of a group are only shown: they cannot be tapped on the screen.',
+    'Os cartões de um grupo só se veem: não se podem tocar no ecrã.',
+    'De kaarten van een groep zijn alleen te zien: je kunt ze op het scherm niet aantikken.',
+    'Kortene i en gruppe vises kun: de kan ikke trykkes på skærmen.',
+    'Karty grupy są tylko do oglądania: nie można ich dotykać na ekranie.',
+  ],
+  [
+    'Auto: según lo que es. Una batería muestra cuánta carga le queda.',
+    'Auto: by what it is. A battery shows how much charge it has left.',
+    'Auto: conforme o que é. Uma bateria mostra quanta carga lhe resta.',
+    'Auto: naar wat het is. Een batterij laat zien hoeveel lading er nog in zit.',
+    'Auto: efter hvad det er. Et batteri viser, hvor meget strøm der er tilbage.',
+    'Auto: według tego, czym jest. Bateria pokazuje, ile ładunku jej zostało.',
+  ],
+  ['Segundo sensor', 'Second sensor', 'Segundo sensor', 'Tweede sensor', 'Anden sensor', 'Drugi czujnik'],
+  [
+    'Su valor sale detrás del primero, por ejemplo 21,4 °C / 48 %.',
+    'Its value shows after the first one, for example 21.4 °C / 48 %.',
+    'O seu valor aparece a seguir ao primeiro, por exemplo 21,4 °C / 48 %.',
+    'De waarde staat na de eerste, bijvoorbeeld 21,4 °C / 48 %.',
+    'Værdien vises efter den første, for eksempel 21,4 °C / 48 %.',
+    'Jego wartość pojawia się po pierwszej, na przykład 21,4 °C / 48 %.',
+  ],
+  [
+    'Su valor sale detrás del número, por ejemplo 80 % / 320 km.',
+    'Its value shows after the number, for example 80 % / 200 mi.',
+    'O seu valor aparece a seguir ao número, por exemplo 80 % / 320 km.',
+    'De waarde staat na het getal, bijvoorbeeld 80 % / 320 km.',
+    'Værdien vises efter tallet, for eksempel 80 % / 320 km.',
+    'Jego wartość pojawia się po liczbie, na przykład 80 % / 320 km.',
+  ],
+  ['En grande, si hay varios valores se van turnando.', 'Large: with several quotes, they take turns.', 'Em grande: com vários valores, vão alternando.', 'Groot: met meerdere koersen wisselen ze elkaar af.', 'Stor: med flere kurser skiftes de.', 'Duża: przy kilku notowaniach zmieniają się po kolei.'],
+  ['Símbolo y nombre', 'Symbol and name', 'Símbolo e nome', 'Symbool en naam', 'Symbol og navn', 'Symbol i nazwa'],
+  ['Solo el nombre', 'Name only', 'Só o nome', 'Alleen de naam', 'Kun navnet', 'Tylko nazwa'],
+  ['Solo el símbolo', 'Symbol only', 'Só o símbolo', 'Alleen het symbool', 'Kun symbolet', 'Tylko symbol'],
+  ['El nombre es el que le pones tú a cada valor.', 'The name is the one you give each quote.', 'O nome é o que dás a cada valor.', 'De naam is die je zelf aan elke koers geeft.', 'Navnet er det, du selv giver hver kurs.', 'Nazwa to ta, którą sam nadajesz każdemu notowaniu.'],
+  ['Sin símbolo', 'No sign', 'Sem símbolo', 'Zonder teken', 'Uden tegn', 'Bez symbolu'],
+  ['Dólar ($)', 'Dollar ($)', 'Dólar ($)', 'Dollar ($)', 'Dollar ($)', 'Dolar ($)'],
+  ['Euro (€)', 'Euro (€)', 'Euro (€)', 'Euro (€)', 'Euro (€)', 'Euro (€)'],
+  [
+    'Los precios llegan en dólares. En otra moneda se pasan con el cambio del Banco Central Europeo de ese día.',
+    "Prices come in dollars. In another currency they are converted at that day's European Central Bank rate.",
+    'Os preços chegam em dólares. Noutra moeda são convertidos com o câmbio do Banco Central Europeu desse dia.',
+    'De koersen komen in dollars. In een andere munt worden ze omgerekend met de koers van de Europese Centrale Bank van die dag.',
+    'Kurserne kommer i dollar. I en anden valuta omregnes de med Den Europæiske Centralbanks kurs for den dag.',
+    'Ceny przychodzą w dolarach. W innej walucie są przeliczane po kursie Europejskiego Banku Centralnego z danego dnia.',
+  ],
+  [
+    'De fondo: la curva detrás del precio, de borde a borde; en una lista, cada valor lleva la suya detrás.',
+    'Background: the curve behind the price, edge to edge; in a list, each quote has its own behind it.',
+    'De fundo: a curva atrás do preço, de ponta a ponta; numa lista, cada valor tem a sua atrás.',
+    'Achtergrond: de lijn achter de koers, van rand tot rand; in een lijst heeft elke koers de zijne erachter.',
+    'Baggrund: kurven bag prisen, fra kant til kant; i en liste har hver kurs sin egen bagved.',
+    'W tle: krzywa za ceną, od krawędzi do krawędzi; na liście każde notowanie ma swoją za sobą.',
+  ],
+  ['Líneas de la cuadrícula', 'Grid lines', 'Linhas da grelha', 'Rasterlijnen', 'Gitterlinjer', 'Linie siatki'],
+  ['Marcadas', 'Clear', 'Marcadas', 'Duidelijk', 'Tydelige', 'Wyraźne'],
+  ['Fuertes', 'Strong', 'Fortes', 'Sterk', 'Kraftige', 'Mocne'],
+  ['Color de las líneas', 'Line colour', 'Cor das linhas', 'Kleur van de lijnen', 'Farve på linjerne', 'Kolor linii'],
+  ['Su color, en la pestaña Estilo.', 'Their colour is in the Style tab.', 'A cor está no separador Estilo.', 'De kleur staat op het tabblad Stijl.', 'Farven finder du på fanen Stil.', 'Ich kolor jest w karcie Styl.'],
+  ['Su color: Auto es el del tema.', 'Colour: Auto follows the theme.', 'Cor: Auto segue o tema.', 'Kleur: Auto volgt het thema.', 'Farve: Auto følger temaet.', 'Kolor: Auto zgodnie z motywem.'],
+  // how faded the events that have ended are (#32)
+  ['Eventos pasados', 'Past events', 'Eventos passados', 'Voorbije afspraken', 'Tidligere begivenheder', 'Minione wydarzenia'],
+  ['Atenuados', 'Dimmed', 'Esbatidos', 'Gedimd', 'Dæmpede', 'Przygaszone'],
+  ['Un poco', 'Slightly', 'Um pouco', 'Een beetje', 'Lidt', 'Trochę'],
+  ['Normales', 'Normal', 'Normais', 'Normaal', 'Normale', 'Normalne'],
+  [
+    'Cuánto se apagan los que ya han terminado.',
+    'How much the ones that have ended fade.',
+    'Quanto se esbatem os que já terminaram.',
+    'Hoeveel de afspraken die al voorbij zijn vervagen.',
+    'Hvor meget dem, der er slut, tones ned.',
+    'Jak bardzo przygasają te, które już się skończyły.',
+  ],
+  // the Value widget (#34)
+  ['Valor {n}', 'Value {n}', 'Valor {n}', 'Waarde {n}', 'Værdi {n}', 'Wartość {n}'],
+  ['Añadir otro valor', 'Add another value', 'Adicionar outro valor', 'Nog een waarde toevoegen', 'Tilføj en værdi mere', 'Dodaj kolejną wartość'],
+  ['Baterías de los coches', 'Car batteries', 'Baterias dos carros', 'Accu van de auto’s', 'Bilernes batterier', 'Baterie samochodów'],
+  ['Añade al menos un valor', 'Add at least one value', 'Adiciona pelo menos um valor', 'Voeg minstens één waarde toe', 'Tilføj mindst én værdi', 'Dodaj co najmniej jedną wartość'],
+  ['Escribe la clave de cada valor', 'Type the key of each value', 'Escreve a chave de cada valor', 'Vul de sleutel van elke waarde in', 'Skriv nøglen til hver værdi', 'Wpisz klucz każdej wartości'],
+  [
+    'Un valor que no se ha actualizado en ese tiempo sale en gris. 0: nunca.',
+    'A value not updated for that long is greyed out. 0: never.',
+    'Um valor que não é atualizado nesse tempo fica a cinzento. 0: nunca.',
+    'Een waarde die zo lang niet is bijgewerkt, wordt grijs. 0: nooit.',
+    'En værdi, der ikke er opdateret så længe, bliver grå. 0: aldrig.',
+    'Wartość, która tak długo się nie zmieniła, robi się szara. 0: nigdy.',
+  ],
+  [
+    'Números que Home Assistant u otro programa envía a Marco: la batería del coche, la producción solar. Uno en grande, o varios en lista.',
+    'Numbers Home Assistant or another program sends to Marco: the car battery, the solar output. One large, or several as a list.',
+    'Números que o Home Assistant ou outro programa envia ao Marco: a bateria do carro, a produção solar. Um em grande, ou vários em lista.',
+    'Getallen die Home Assistant of een ander programma naar Marco stuurt: de accu van de auto, de zonnepanelen. Eén groot, of meerdere in een lijst.',
+    'Tal, som Home Assistant eller et andet program sender til Marco: bilens batteri, solcellerne. Ét stort, eller flere i en liste.',
+    'Liczby, które Home Assistant lub inny program wysyła do Marco: bateria samochodu, produkcja z paneli. Jedna duża albo kilka na liście.',
+  ],
+  // how much the events' background covers what is behind them (#32)
+  ['Fondo de los eventos', 'Event background', 'Fundo dos eventos', 'Achtergrond van afspraken', 'Baggrund for begivenheder', 'Tło wydarzeń'],
+  ['Suave', 'Soft', 'Suave', 'Zacht', 'Blød', 'Delikatne'],
+  ['Más opaco', 'More solid', 'Mais opaco', 'Voller', 'Mere dækkende', 'Mocniejsze'],
+  ['Sólido', 'Solid', 'Sólido', 'Vol', 'Fyldt', 'Pełne'],
+  [
+    'Más opaco o Sólido se leen mejor sobre una foto.',
+    'More solid or Solid read better over a photo.',
+    'Mais opaco ou Sólido leem-se melhor sobre uma foto.',
+    'Voller of Vol leest beter op een foto.',
+    'Mere dækkende eller Fyldt er lettere at læse oven på et foto.',
+    'Mocniejsze lub Pełne lepiej czytać na zdjęciu.',
+  ],
+  // where the layouts put the clock, and how large (#36)
+  [
+    'Automática: donde lo pone el diseño. Con la fecha y los avisos de debajo.',
+    'Automatic: where the layout puts it. The date and the notes under it move with it.',
+    'Automática: onde o design o coloca. Com a data e os avisos por baixo.',
+    'Automatisch: waar de indeling hem zet. De datum en de meldingen eronder gaan mee.',
+    'Automatisk: hvor layoutet placerer det. Datoen og beskederne under følger med.',
+    'Automatycznie: tam, gdzie umieszcza go układ. Data i powiadomienia pod nim przesuwają się razem z nim.',
+  ],
+  [
+    'Nunca pasa del ancho de su panel: para un reloj más grande, ensancha el panel o quita los segundos.',
+    'It never gets wider than its panel: for a larger clock, widen the panel or hide the seconds.',
+    'Nunca passa da largura do seu painel: para um relógio maior, alarga o painel ou tira os segundos.',
+    'Hij wordt nooit breder dan zijn paneel: voor een grotere klok maak je het paneel breder of verberg je de seconden.',
+    'Det bliver aldrig bredere end sit panel: vil du have et større ur, så gør panelet bredere eller skjul sekunderne.',
+    'Nigdy nie jest szerszy niż jego panel: aby zegar był większy, poszerz panel lub ukryj sekundy.',
+  ],
+  // a photo card on Personalizado: always behind the other cards (#36), and in the sidebar it fills the bar (#41)
+  [
+    'La foto va siempre detrás de las otras tarjetas, así que puedes poner tarjetas encima. En la barra lateral llena toda la barra.',
+    'The photo always goes behind the other cards, so you can place cards over it. In the sidebar it fills the whole bar.',
+    'A foto fica sempre atrás dos outros cartões, por isso podes pôr cartões por cima. Na barra lateral enche a barra toda.',
+    'De foto staat altijd achter de andere kaarten, dus je kunt er kaarten op zetten. In de zijbalk vult hij de hele balk.',
+    'Fotoet ligger altid bag de andre kort, så du kan lægge kort oven på det. I sidebjælken fylder det hele bjælken.',
+    'Zdjęcie jest zawsze za innymi kartami, więc możesz kłaść na nim karty. Na pasku bocznym wypełnia cały pasek.',
+  ],
+  ['Llena la barra lateral', 'Fills the sidebar', 'Enche a barra lateral', 'Vult de zijbalk', 'Fylder sidebjælken', 'Wypełnia pasek boczny'],
+  [
+    'Llena la barra lateral, detrás de sus tarjetas.',
+    'It fills the sidebar, behind its cards.',
+    'Enche a barra lateral, atrás dos seus cartões.',
+    'Hij vult de zijbalk, achter de kaarten erin.',
+    'Det fylder sidebjælken, bag dens kort.',
+    'Wypełnia pasek boczny, za jego kartami.',
+  ],
+  [
+    'Una tarjeta de foto llena la barra lateral, así que este relleno no se ve. Vuelve si la quitas de la barra.',
+    'A photo card fills the sidebar, so this fill does not show. It comes back if you take the card out of the bar.',
+    'Um cartão de foto enche a barra lateral, por isso este preenchimento não se vê. Volta se tirares o cartão da barra.',
+    'Een fotokaart vult de zijbalk, dus deze vulling is niet te zien. Hij komt terug als je de kaart uit de balk haalt.',
+    'Et fotokort fylder sidebjælken, så denne udfyldning ses ikke. Den kommer tilbage, hvis du tager kortet ud af bjælken.',
+    'Karta zdjęcia wypełnia pasek boczny, więc tego wypełnienia nie widać. Wróci, gdy wyjmiesz kartę z paska.',
+  ],
+  [
+    'En horizontal una tarjeta de foto llena la barra lateral: este relleno solo se ve en vertical.',
+    'In landscape a photo card fills the sidebar: this fill only shows in portrait.',
+    'Na horizontal um cartão de foto enche a barra lateral: este preenchimento só se vê na vertical.',
+    'Liggend vult een fotokaart de zijbalk: deze vulling is alleen staand te zien.',
+    'I liggende format fylder et fotokort sidebjælken: denne udfyldning ses kun i stående format.',
+    'W poziomie karta zdjęcia wypełnia pasek boczny: to wypełnienie widać tylko w pionie.',
+  ],
+  [
+    'En vertical una tarjeta de foto llena la barra lateral: este relleno solo se ve en horizontal.',
+    'In portrait a photo card fills the sidebar: this fill only shows in landscape.',
+    'Na vertical um cartão de foto enche a barra lateral: este preenchimento só se vê na horizontal.',
+    'Staand vult een fotokaart de zijbalk: deze vulling is alleen liggend te zien.',
+    'I stående format fylder et fotokort sidebjælken: denne udfyldning ses kun i liggende format.',
+    'W pionie karta zdjęcia wypełnia pasek boczny: to wypełnienie widać tylko w poziomie.',
+  ],
+  [
+    'La barra lateral ya tiene una foto detrás de sus tarjetas. Solo cabe una.',
+    'The sidebar already has a photo behind its cards. Only one fits.',
+    'A barra lateral já tem uma foto atrás dos seus cartões. Só cabe uma.',
+    'De zijbalk heeft al een foto achter de kaarten. Er past er maar één.',
+    'Sidebjælken har allerede et foto bag sine kort. Der er kun plads til ét.',
+    'Pasek boczny ma już zdjęcie za swoimi kartami. Mieści się tylko jedno.',
+  ],
+  [
+    'En la barra lateral de esta pantalla la foto cambia cada {interval}, como se eligió en el editor.',
+    'In the sidebar of this screen the photo changes every {interval}, as chosen in the editor.',
+    'Na barra lateral deste ecrã a foto muda a cada {interval}, como se escolheu no editor.',
+    'In de zijbalk van dit scherm verandert de foto elke {interval}, zoals gekozen in de editor.',
+    'I sidebjælken på denne skærm skifter fotoet hver {interval}, som valgt i editoren.',
+    'Na pasku bocznym tego ekranu zdjęcie zmienia się co {interval}, tak jak wybrano w edytorze.',
+  ],
+  // a Personalizado screen's photo: the Fondo section's switch and the editor's Fondo go together
+  [
+    'En una pantalla Personalizado también se elige en el editor, en Fondo: Foto, Animado o Color.',
+    'On a Custom screen it is also chosen in the editor, under Background: Photo, Animated or Colour.',
+    'Num ecrã Personalizado também se escolhe no editor, em Fundo: Foto, Animado ou Cor.',
+    'Op een Aangepast scherm kies je dit ook in de editor, bij Achtergrond: Foto, Bewegend of Kleur.',
+    'På en Tilpasset skærm vælges det også i editoren under Baggrund: Foto, Animeret eller Farve.',
+    'Na ekranie Własny wybiera się to też w edytorze, w sekcji Tło: Zdjęcie, Animowane lub Kolor.',
+  ],
+  [
+    'Con el Fondo en Foto no se puede añadir. Cambia el Fondo de la pantalla a Animado o Color.',
+    "It cannot be added while the Background is Photo. Change the screen's Background to Animated or Colour.",
+    'Não se pode adicionar com o Fundo em Foto. Muda o Fundo do ecrã para Animado ou Cor.',
+    'Kan niet worden toegevoegd zolang de Achtergrond Foto is. Zet de Achtergrond van het scherm op Bewegend of Kleur.',
+    'Kan ikke tilføjes, mens Baggrund er Foto. Skift skærmens Baggrund til Animeret eller Farve.',
+    'Nie można dodać, gdy Tło to Zdjęcie. Zmień Tło ekranu na Animowane lub Kolor.',
+  ],
+  // ... out to the edges of the screen
+  ['Hasta el borde de la pantalla', 'Out to the screen edge', 'Até à borda do ecrã', 'Tot aan de rand van het scherm', 'Helt ud til skærmkanten', 'Do krawędzi ekranu'],
+  [
+    'Esquinas rectas, y la foto llega al borde de la pantalla por los lados donde lo toca, como la foto del diseño Moderno. En la barra lateral llega a los bordes de la barra.',
+    'Square corners, and the photo reaches the edge of the screen on the sides where it touches it, like the photo of the Modern design. In the sidebar it reaches the edges of the bar.',
+    'Cantos retos, e a foto chega à borda do ecrã nos lados onde lhe toca, como a foto do design Moderno. Na barra lateral chega às bordas da barra.',
+    'Rechte hoeken, en de foto loopt door tot de rand van het scherm aan de kanten waar hij die raakt, zoals de foto van het ontwerp Modern. In de zijbalk loopt hij door tot de randen van de balk.',
+    'Lige hjørner, og fotoet går helt ud til skærmkanten på de sider, hvor det rører den, som fotoet i designet Moderne. I sidebjælken går det helt ud til bjælkens kanter.',
+    'Proste rogi, a zdjęcie sięga krawędzi ekranu po stronach, gdzie jej dotyka, jak zdjęcie w projekcie Nowoczesny. Na pasku bocznym sięga krawędzi paska.',
+  ],
+  // manual calendar downloads on Estado (#37); {secs}, not {n}, so t() never picks plural forms for these short labels
+  ['Descargar ahora', 'Fetch now', 'Transferir agora', 'Nu ophalen', 'Hent nu', 'Pobierz teraz'],
+  ['Descargar todos', 'Fetch all', 'Transferir todos', 'Alles ophalen', 'Hent alle', 'Pobierz wszystkie'],
+  ['Descarga ahora todos los calendarios activos', 'Fetch every active calendar now', 'Transfere agora todos os calendários ativos', "Haal alle actieve agenda's nu op", 'Henter alle aktive kalendere nu', 'Pobiera teraz wszystkie aktywne kalendarze'],
+  ['Espera {secs} s', 'Wait {secs} s', 'Aguarde {secs} s', 'Wacht {secs} s', 'Vent {secs} s', 'Poczekaj {secs} s'],
+  ['Calendario descargado', 'Calendar fetched', 'Calendário transferido', 'Agenda opgehaald', 'Kalender hentet', 'Kalendarz pobrany'],
+  ['Calendarios descargados', 'Calendars fetched', 'Calendários transferidos', "Agenda's opgehaald", 'Kalendere hentet', 'Kalendarze pobrane'],
+  ['No se pudo descargar el calendario.', 'The calendar could not be fetched.', 'Não foi possível transferir o calendário.', 'De agenda kon niet worden opgehaald.', 'Kalenderen kunne ikke hentes.', 'Nie udało się pobrać kalendarza.'],
+  ['Algunos calendarios no se pudieron descargar.', 'Some calendars could not be fetched.', 'Alguns calendários não puderam ser transferidos.', "Sommige agenda's konden niet worden opgehaald.", 'Nogle kalendere kunne ikke hentes.', 'Niektórych kalendarzy nie udało się pobrać.'],
+  [
+    'Ya se descargó hace un momento. Inténtalo de nuevo en {secs} s.',
+    'It was fetched a moment ago. Try again in {secs} s.',
+    'Foi transferido há pouco. Tente de novo dentro de {secs} s.',
+    'Het is net opgehaald. Probeer het over {secs} s opnieuw.',
+    'Den blev hentet for et øjeblik siden. Prøv igen om {secs} s.',
+    'Pobrano przed chwilą. Spróbuj ponownie za {secs} s.',
+  ],
+  // the days the month / week grid shows (#39)
+  ['Días que se muestran', 'Days shown', 'Dias mostrados', 'Getoonde dagen', 'Viste dage', 'Wyświetlane dni'],
+  ['Fin de semana', 'Weekend', 'Fim de semana', 'Weekend', 'Weekend', 'Weekend'],
+  [
+    'Los días sin marcar no ocupan sitio y sus eventos no se ven. Un evento de varios días se muestra en los días marcados que toca.',
+    'Unticked days take no space and their events are not shown. An event over several days shows on the ticked days it covers.',
+    'Os dias não marcados não ocupam espaço e os seus eventos não se veem. Um evento de vários dias aparece nos dias marcados que abrange.',
+    'Niet aangevinkte dagen nemen geen ruimte in en hun afspraken zijn niet te zien. Een afspraak van meerdere dagen staat op de aangevinkte dagen die ze raakt.',
+    'Dage uden flueben fylder ikke og deres begivenheder vises ikke. En begivenhed over flere dage vises på de afkrydsede dage, den dækker.',
+    'Nieodznaczone dni nie zajmują miejsca, a ich wydarzenia nie są widoczne. Wydarzenie wielodniowe widać w zaznaczonych dniach, które obejmuje.',
+  ],
+  // what night mode does (#38, sections/Screen.tsx NightAction) and the pointer to it from the Bedside layout
+  [
+    'Atenúa la pantalla, muestra la vista de mesilla o la deja en negro durante la noche.',
+    'Dims the screen, shows the bedside view or turns it black at night.',
+    'Escurece o ecrã, mostra a vista de cabeceira ou deixa-o preto durante a noite.',
+    "Dimt het scherm, toont de nachtkastjeweergave of maakt het 's nachts zwart.",
+    'Dæmper skærmen, viser natbordsvisningen eller gør den sort om natten.',
+    'Przyciemnia ekran, pokazuje widok przy łóżku albo wygasza go na czarno w nocy.',
+  ],
+  [
+    'Durante el modo noche',
+    'During night mode',
+    'Durante o modo noturno',
+    'Tijdens de nachtmodus',
+    'Under nattilstand',
+    'W trybie nocnym',
+  ],
+  [
+    'Atenuar',
+    'Dim',
+    'Escurecer',
+    'Dimmen',
+    'Dæmp',
+    'Przyciemnij',
+  ],
+  [
+    'Vista de mesilla',
+    'Bedside view',
+    'Vista de cabeceira',
+    'Nachtkastjeweergave',
+    'Natbordsvisning',
+    'Widok przy łóżku',
+  ],
+  [
+    'En negro',
+    'Black',
+    'Preto',
+    'Zwart',
+    'Sort',
+    'Czarny',
+  ],
+  [
+    'Una semana',
+    'One week',
+    'Uma semana',
+    'Eén week',
+    'Én uge',
+    'Jeden tydzień',
+  ],
+  [
+    'Tres semanas',
+    'Three weeks',
+    'Três semanas',
+    'Drie weken',
+    'Tre uger',
+    'Trzy tygodnie',
+  ],
+  [
+    'Cuatro semanas',
+    'Four weeks',
+    'Quatro semanas',
+    'Vier weken',
+    'Fire uger',
+    'Cztery tygodnie',
+  ],
+  [
+    'Brillo de la vista de mesilla',
+    'Bedside view brightness',
+    'Brilho da vista de cabeceira',
+    'Helderheid van de nachtkastjeweergave',
+    'Natbordsvisningens lysstyrke',
+    'Jasność widoku przy łóżku',
+  ],
+  [
+    'Brillo de los avisos',
+    'Brightness of the alerts',
+    'Brilho dos avisos',
+    'Helderheid van de meldingen',
+    'Lysstyrke for beskederne',
+    'Jasność powiadomień',
+  ],
+  [
+    'Despertar con el timbre y los avisos',
+    'Wake for the doorbell and announcements',
+    'Acordar com a campainha e os avisos',
+    'Wekken voor de deurbel en meldingen',
+    'Væk ved dørklokken og beskeder',
+    'Budź przy dzwonku i powiadomieniach',
+  ],
+  [
+    'Despertar con los avisos',
+    'Wake for announcements',
+    'Acordar com os avisos',
+    'Wekken voor meldingen',
+    'Væk ved beskeder',
+    'Budź przy powiadomieniach',
+  ],
+  [
+    'La pantalla sigue en negro y solo enseña el timbre o el aviso mientras dura, con poco brillo.',
+    'The screen stays black and only shows the doorbell or the announcement while it lasts, dimmed.',
+    'O ecrã continua preto e só mostra a campainha ou o aviso enquanto dura, com pouco brilho.',
+    'Het scherm blijft zwart en toont alleen de deurbel of de melding zolang die duurt, gedimd.',
+    'Skærmen forbliver sort og viser kun dørklokken eller beskeden, mens den varer, dæmpet.',
+    'Ekran pozostaje czarny i pokazuje tylko dzwonek lub powiadomienie, dopóki trwa, przyciemnione.',
+  ],
+  [
+    'El calendario está apagado en esta pantalla: se verá el reloj.',
+    'The calendar is off on this screen: the clock is shown.',
+    'O calendário está desligado neste ecrã: vê-se o relógio.',
+    'De agenda staat uit op dit scherm: je ziet de klok.',
+    'Kalenderen er slået fra på denne skærm: uret vises.',
+    'Kalendarz jest wyłączony na tym ekranie: widać zegar.',
+  ],
+  [
+    'Para verla solo de noche, deja otro diseño y elige Vista de mesilla en Pantalla, Modo noche.',
+    'To see it only at night, keep another layout and choose Bedside view in Screen, Night mode.',
+    'Para a ver só à noite, deixe outra disposição e escolha Vista de cabeceira em Ecrã, Modo noturno.',
+    "Wil je hem alleen 's nachts zien, houd dan een andere indeling en kies Nachtkastjeweergave bij Scherm, Nachtmodus.",
+    'Vil du kun se den om natten, så behold et andet layout og vælg Natbordsvisning under Skærm, Nattilstand.',
+    'Aby widzieć go tylko w nocy, zostaw inny układ i wybierz Widok przy łóżku w Ekran, Tryb nocny.',
+  ],
+];
+
+// the Bolsa card's currencies (fieldSpecs.ts): an ISO code reads the same in every language
+for (const c of ['AUD', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN', 'RON', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR']) {
+  ROWS.push([c, c, c, c, c, c]);
+}
+
+export const ROWS_GROUP: [string, string, string][] = ROWS.map(([es, en, pt]) => [es, en, pt]);
+export const NL_GROUP: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[3]]));
+export const DA_GROUP: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[4]]));
+export const PL_GROUP: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[5]]));
+
+export const DE_GROUP: Record<string, string> = {
+  'De 2 a 4 tarjetas en el hueco de una, en filas o en columnas.':
+    '2 bis 4 Karten auf dem Platz einer einzigen, in Zeilen oder in Spalten.',
+  'Las tarjetas de un grupo solo se ven: no se pueden tocar en la pantalla.':
+    'Die Karten einer Gruppe werden nur angezeigt: Sie lassen sich auf dem Bildschirm nicht antippen.',
+  'Auto: según lo que es. Una batería muestra cuánta carga le queda.':
+    'Auto: je nachdem, was es ist. Ein Akku zeigt an, wie viel Ladung noch übrig ist.',
   'Segundo sensor': 'Zweiter Sensor',
-  'Su valor sale detrás del primero, por ejemplo 21,4 °C / 48 %.': 'Sein Wert erscheint hinter dem ersten, zum Beispiel 21,4 °C / 48 %.',
-  'Su valor sale detrás del número, por ejemplo 80 % / 320 km.': 'Sein Wert erscheint hinter der Zahl, zum Beispiel 80 % / 320 km.',
-  'En grande, si hay varios valores se van turnando.': 'Groß: Bei mehreren Werten wechseln sie sich ab.',
+  'Su valor sale detrás del primero, por ejemplo 21,4 °C / 48 %.':
+    'Sein Wert erscheint hinter dem ersten, zum Beispiel 21,4 °C / 48 %.',
+  'Su valor sale detrás del número, por ejemplo 80 % / 320 km.':
+    'Sein Wert erscheint hinter der Zahl, zum Beispiel 80 % / 320 km.',
+  'En grande, si hay varios valores se van turnando.':
+    'Groß: Bei mehreren Werten wechseln sie sich ab.',
   'Símbolo y nombre': 'Symbol und Name',
-  'Solo el nombre': 'Nur Name',
-  'Solo el símbolo': 'Nur Symbol',
-  'El nombre es el que le pones tú a cada valor.': 'Der Name ist derjenige, den du jedem Wert selbst gibst.',
+  'Solo el nombre': 'Nur der Name',
+  'Solo el símbolo': 'Nur das Symbol',
+  'El nombre es el que le pones tú a cada valor.':
+    'Der Name ist der, den du jedem Wert selbst gibst.',
   'Sin símbolo': 'Ohne Zeichen',
   'Dólar ($)': 'Dollar ($)',
   'Euro (€)': 'Euro (€)',
-  'Los precios llegan en dólares. En otra moneda se pasan con el cambio del Banco Central Europeo de ese día.': 'Die Kurse kommen in US-Dollar. In einer anderen Währung werden sie zum Tageskurs der Europäischen Zentralbank umgerechnet.',
-  'De fondo: la curva detrás del precio, de borde a borde; en una lista, cada valor lleva la suya detrás.': 'Im Hintergrund: die Kurve hinter dem Kurs, von Rand zu Rand; in einer Liste hat jeder Wert seine eigene dahinter.',
+  'Los precios llegan en dólares. En otra moneda se pasan con el cambio del Banco Central Europeo de ese día.':
+    'Die Kurse kommen in Dollar. In einer anderen Währung werden sie zum Kurs der Europäischen Zentralbank dieses Tages umgerechnet.',
+  'De fondo: la curva detrás del precio, de borde a borde; en una lista, cada valor lleva la suya detrás.':
+    'Im Hintergrund: die Kurve hinter dem Preis, von Rand zu Rand; in einer Liste hat jeder Wert seine eigene dahinter.',
   'Líneas de la cuadrícula': 'Rasterlinien',
   'Marcadas': 'Deutlich',
   'Fuertes': 'Kräftig',
-  'Color de las líneas': 'Linienfarbe',
-  'Su color, en la pestaña Estilo.': 'Ihre Farbe findest du im Tab Stil.',
+  'Color de las líneas': 'Farbe der Linien',
+  'Su color, en la pestaña Estilo.': 'Ihre Farbe findest du auf dem Tab Stil.',
   'Su color: Auto es el del tema.': 'Farbe: Auto folgt dem Design.',
   'Eventos pasados': 'Vergangene Termine',
   'Atenuados': 'Abgeschwächt',
   'Un poco': 'Ein wenig',
   'Normales': 'Normal',
-  'Cuánto se apagan los que ya han terminado.': 'Wie stark bereits beendete Termine abgeblendet werden.',
+  'Cuánto se apagan los que ya han terminado.':
+    'Wie stark bereits beendete Termine verblassen.',
   'Valor {n}': 'Wert {n}',
   'Añadir otro valor': 'Weiteren Wert hinzufügen',
   'Baterías de los coches': 'Autobatterien',
   'Añade al menos un valor': 'Füge mindestens einen Wert hinzu',
   'Escribe la clave de cada valor': 'Gib den Schlüssel für jeden Wert ein',
-  'Un valor que no se ha actualizado en ese tiempo sale en gris. 0: nunca.': 'Ein Wert, der so lange nicht aktualisiert wurde, wird grau dargestellt. 0: nie.',
-  'Números que Home Assistant u otro programa envía a Marco: la batería del coche, la producción solar. Uno en grande, o varios en lista.': 'Zahlen, die Home Assistant oder ein anderes Programm an Marco sendet: die Autobatterie, die Solarleistung. Ein Wert groß oder mehrere als Liste.',
+  'Un valor que no se ha actualizado en ese tiempo sale en gris. 0: nunca.':
+    'Ein Wert, der so lange nicht aktualisiert wurde, wird grau dargestellt. 0: nie.',
+  'Números que Home Assistant u otro programa envía a Marco: la batería del coche, la producción solar. Uno en grande, o varios en lista.':
+    'Zahlen, die Home Assistant oder ein anderes Programm an Marco sendet: die Autobatterie, die Solarleistung. Eine groß oder mehrere als Liste.',
   'Fondo de los eventos': 'Terminhintergrund',
   'Suave': 'Sanft',
   'Más opaco': 'Deckender',
   'Sólido': 'Deckend',
-  'Más opaco o Sólido se leen mejor sobre una foto.': 'Deckender oder Deckend lässt sich auf einem Foto besser lesen.',
-  'Automática: donde lo pone el diseño. Con la fecha y los avisos de debajo.': 'Automatisch: dort, wo das Layout sie platziert. Zusammen mit dem Datum und den Hinweisen darunter.',
-  'Nunca pasa del ancho de su panel: para un reloj más grande, ensancha el panel o quita los segundos.': 'Sie wird nie breiter als ihr Bereich: Für eine größere Uhr verbreitere den Bereich oder blende die Sekunden aus.',
-  'La foto va siempre detrás de las otras tarjetas, así que puedes poner tarjetas encima. En la barra lateral llena toda la barra.': 'Das Foto liegt immer hinter den anderen Karten, sodass du Karten darauf platzieren kannst. In der Seitenleiste füllt es die gesamte Leiste aus.',
-  'Llena la barra lateral': 'Füllt die Seitenleiste',
-  'Llena la barra lateral, detrás de sus tarjetas.': 'Füllt die Seitenleiste hinter ihren Karten aus.',
-  'Una tarjeta de foto llena la barra lateral, así que este relleno no se ve. Vuelve si la quitas de la barra.': 'Eine Fotokarte füllt die Seitenleiste aus, daher ist diese Füllung nicht sichtbar. Sie erscheint wieder, wenn du die Karte aus der Leiste entfernst.',
-  'En horizontal una tarjeta de foto llena la barra lateral: este relleno solo se ve en vertical.': 'Im Querformat füllt eine Fotokarte die Seitenleiste aus: Diese Füllung ist nur im Hochformat sichtbar.',
-  'En vertical una tarjeta de foto llena la barra lateral: este relleno solo se ve en horizontal.': 'Im Hochformat füllt eine Fotokarte die Seitenleiste aus: Diese Füllung ist nur im Querformat sichtbar.',
-  'La barra lateral ya tiene una foto detrás de sus tarjetas. Solo cabe una.': 'Die Seitenleiste hat bereits ein Foto hinter ihren Karten. Es passt nur eines.',
-  'En la barra lateral de esta pantalla la foto cambia cada {interval}, como se eligió en el editor.': 'In der Seitenleiste dieses Bildschirms wechselt das Foto alle {interval}, wie im Editor festgelegt.',
-  'En una pantalla Personalizado también se elige en el editor, en Fondo: Foto, Animado o Color.': 'Auf einem benutzerdefinierten Bildschirm wird dies auch im Editor unter Hintergrund gewählt: Foto, Animiert oder Farbe.',
-  'Con el Fondo en Foto no se puede añadir. Cambia el Fondo de la pantalla a Animado o Color.': 'Kann nicht hinzugefügt werden, solange der Hintergrund auf Foto steht. Ändere den Bildschirmhintergrund auf Animiert oder Farbe.',
+  'Más opaco o Sólido se leen mejor sobre una foto.':
+    'Deckender oder Deckend lässt sich über einem Foto besser lesen.',
+  'Automática: donde lo pone el diseño. Con la fecha y los avisos de debajo.':
+    'Automatisch: dort, wo das Layout sie platziert. Datum und Hinweise darunter bewegen sich mit.',
+  'Nunca pasa del ancho de su panel: para un reloj más grande, ensancha el panel o quita los segundos.':
+    'Wird nie breiter als sein Bereich: Für eine größere Uhr verbreitere den Bereich oder blende die Sekunden aus.',
+  'La foto va siempre detrás de las otras tarjetas, así que puedes poner tarjetas encima. En la barra lateral llena toda la barra.':
+    'Das Foto liegt immer hinter den anderen Karten, sodass du Karten darauf legen kannst. In der Seitenleiste füllt es die gesamte Leiste aus.',
+  'Llena la barra lateral': 'Füllt die Seitenleiste aus',
+  'Llena la barra lateral, detrás de sus tarjetas.':
+    'Füllt die Seitenleiste hinter ihren Karten aus.',
+  'Una tarjeta de foto llena la barra lateral, así que este relleno no se ve. Vuelve si la quitas de la barra.':
+    'Eine Fotokarte füllt die Seitenleiste aus, daher ist diese Füllung nicht sichtbar. Sie erscheint wieder, wenn du die Karte aus der Leiste entfernst.',
+  'En horizontal una tarjeta de foto llena la barra lateral: este relleno solo se ve en vertical.':
+    'Im Querformat füllt eine Fotokarte die Seitenleiste aus: Diese Füllung ist nur im Hochformat sichtbar.',
+  'En vertical una tarjeta de foto llena la barra lateral: este relleno solo se ve en horizontal.':
+    'Im Hochformat füllt eine Fotokarte die Seitenleiste aus: Diese Füllung ist nur im Querformat sichtbar.',
+  'La barra lateral ya tiene una foto detrás de sus tarjetas. Solo cabe una.':
+    'Die Seitenleiste hat bereits ein Foto hinter ihren Karten. Es passt nur eines.',
+  'En la barra lateral de esta pantalla la foto cambia cada {interval}, como se eligió en el editor.':
+    'In der Seitenleiste dieses Bildschirms wechselt das Foto alle {interval}, wie im Editor ausgewählt.',
+  'En una pantalla Personalizado también se elige en el editor, en Fondo: Foto, Animado o Color.':
+    'Auf einem individuellen Bildschirm wird dies ebenfalls im Editor unter Hintergrund gewählt: Foto, Animiert oder Farbe.',
+  'Con el Fondo en Foto no se puede añadir. Cambia el Fondo de la pantalla a Animado o Color.':
+    'Kann nicht hinzugefügt werden, solange der Hintergrund auf Foto steht. Ändere den Hintergrund des Bildschirms auf Animiert oder Farbe.',
   'Hasta el borde de la pantalla': 'Bis zum Bildschirmrand',
-  'Esquinas rectas, y la foto llega al borde de la pantalla por los lados donde lo toca, como la foto del diseño Moderno. En la barra lateral llega a los bordes de la barra.': 'Gerade Ecken, und das Foto reicht an den berührten Seiten bis an den Bildschirmrand, wie beim Layout Modern. In der Seitenleiste reicht es bis an die Ränder der Leiste.',
+  'Esquinas rectas, y la foto llega al borde de la pantalla por los lados donde lo toca, como la foto del diseño Moderno. En la barra lateral llega a los bordes de la barra.':
+    'Eckige Ecken, und das Foto reicht an den Seiten, an denen es den Rand berührt, bis an den Bildschirmrand, wie beim Layout Modern. In der Seitenleiste reicht es bis an die Ränder der Leiste.',
   'Descargar ahora': 'Jetzt abrufen',
   'Descargar todos': 'Alle abrufen',
-  'Descarga ahora todos los calendarios activos': 'Ruft jetzt alle aktiven Kalender ab',
-  'Espera {secs} s': 'Warte {secs} s',
+  'Descarga ahora todos los calendarios activos':
+    'Ruft jetzt alle aktiven Kalender ab',
+  'Espera {secs} s': 'Warte {secs} Sek.',
   'Calendario descargado': 'Kalender abgerufen',
   'Calendarios descargados': 'Kalender abgerufen',
-  'No se pudo descargar el calendario.': 'Der Kalender konnte nicht abgerufen werden.',
-  'Algunos calendarios no se pudieron descargar.': 'Einige Kalender konnten nicht abgerufen werden.',
-  'Ya se descargó hace un momento. Inténtalo de nuevo en {secs} s.': 'Wurde gerade erst abgerufen. Versuche es in {secs} s erneut.',
+  'No se pudo descargar el calendario.':
+    'Der Kalender konnte nicht abgerufen werden.',
+  'Algunos calendarios no se pudieron descargar.':
+    'Einige Kalender konnten nicht abgerufen werden.',
+  'Ya se descargó hace un momento. Inténtalo de nuevo en {secs} s.':
+    'Wurde gerade erst abgerufen. Versuche es in {secs} Sek. erneut.',
   'Días que se muestran': 'Angezeigte Tage',
   'Fin de semana': 'Wochenende',
-  'Los días sin marcar no ocupan sitio y sus eventos no se ven. Un evento de varios días se muestra en los días marcados que toca.': 'Nicht ausgewählte Tage beanspruchen keinen Platz und ihre Termine werden nicht angezeigt. Ein mehrtägiger Termin erscheint an den ausgewählten Tagen, die er berührt.',
-  'Atenúa la pantalla, muestra la vista de mesilla o la deja en negro durante la noche.': 'Dimmt den Bildschirm, zeigt die Nachttischansicht oder schaltet ihn nachts schwarz.',
+  'Los días sin marcar no ocupan sitio y sus eventos no se ven. Un evento de varios días se muestra en los días marcados que toca.':
+    'Nicht ausgewählte Tage nehmen keinen Platz ein und ihre Termine werden nicht angezeigt. Ein mehrtägiger Termin erscheint an den ausgewählten Tagen, die er abdeckt.',
+  'Atenúa la pantalla, muestra la vista de mesilla o la deja en negro durante la noche.':
+    'Dimmt den Bildschirm, zeigt die Nachttischansicht oder schaltet ihn nachts schwarz.',
   'Durante el modo noche': 'Während des Nachtmodus',
   'Atenuar': 'Dimmen',
   'Vista de mesilla': 'Nachttischansicht',
@@ -77,24 +491,41 @@ const DE_GROUP_BASE: Record<string, string> = {
   'Cuatro semanas': 'Vier Wochen',
   'Brillo de la vista de mesilla': 'Helligkeit der Nachttischansicht',
   'Brillo de los avisos': 'Helligkeit der Hinweise',
-  'Despertar con el timbre y los avisos': 'Bei Türklingel und Hinweisen aufwecken',
+  'Despertar con el timbre y los avisos':
+    'Bei Türklingel und Hinweisen aufwecken',
   'Despertar con los avisos': 'Bei Hinweisen aufwecken',
-  'La pantalla sigue en negro y solo enseña el timbre o el aviso mientras dura, con poco brillo.': 'Der Bildschirm bleibt schwarz und zeigt nur die Türklingel oder den Hinweis für deren Dauer gedimmt an.',
-  'El calendario está apagado en esta pantalla: se verá el reloj.': 'Der Kalender ist auf diesem Bildschirm ausgeschaltet: Es wird die Uhr angezeigt.',
-  'Para verla solo de noche, deja otro diseño y elige Vista de mesilla en Pantalla, Modo noche.': 'Um sie nur nachts zu sehen, behalte ein anderes Layout bei und wähle Nachttischansicht unter Bildschirm, Nachtmodus.',
-};
-for (const c of ['AUD', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN', 'RON', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR']) {
-  GROUP_ROWS.push([c, c]);
-}
-
-export const ROWS_GROUP: [string, string, string][] = ROWS.map(([es, en, pt]) => [es, en, pt]);
-export const NL_GROUP: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[3]]));
-export const DA_GROUP: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[4]]));
-export const PL_GROUP: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[5]]));
-export const DE_GROUP: Record<string, string> = Object.fromEntries(GROUP_ROWS);
-export const DE_GROUP: Record<string, string> = {
-  ...DE_GROUP_BASE,
-  ...Object.fromEntries(
-    ['AUD', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN', 'RON', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR'].map((c) => [c, c]),
-  ),
+  'La pantalla sigue en negro y solo enseña el timbre o el aviso mientras dura, con poco brillo.':
+    'Der Bildschirm bleibt schwarz und zeigt nur die Türklingel oder den Hinweis gedimmt an, solange sie aktiv sind.',
+  'El calendario está apagado en esta pantalla: se verá el reloj.':
+    'Der Kalender ist auf diesem Bildschirm ausgeschaltet: Es wird die Uhr angezeigt.',
+  'Para verla solo de noche, deja otro diseño y elige Vista de mesilla en Pantalla, Modo noche.':
+    'Um sie nur nachts zu sehen, behalte ein anderes Layout bei und wähle Nachttischansicht unter Bildschirm, Nachtmodus.',
+  AUD: 'AUD',
+  BRL: 'BRL',
+  CAD: 'CAD',
+  CHF: 'CHF',
+  CNY: 'CNY',
+  CZK: 'CZK',
+  DKK: 'DKK',
+  GBP: 'GBP',
+  HKD: 'HKD',
+  HUF: 'HUF',
+  IDR: 'IDR',
+  ILS: 'ILS',
+  INR: 'INR',
+  ISK: 'ISK',
+  JPY: 'JPY',
+  KRW: 'KRW',
+  MXN: 'MXN',
+  MYR: 'MYR',
+  NOK: 'NOK',
+  NZD: 'NZD',
+  PHP: 'PHP',
+  PLN: 'PLN',
+  RON: 'RON',
+  SEK: 'SEK',
+  SGD: 'SGD',
+  THB: 'THB',
+  TRY: 'TRY',
+  ZAR: 'ZAR',
 };
