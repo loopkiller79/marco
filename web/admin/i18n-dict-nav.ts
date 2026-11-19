@@ -1,21 +1,235 @@
 // Personalizado "Navegación" (touch screens: go to another screen, pause the carousel, its progress, the swipe, exit
 // the kiosk and shut down the Pi) and the hint next to the animated background. Each row is [es, en, pt, nl, da].
 // ROWS_NAV feeds EN and PT (i18n-dict.ts); NL_NAV and DA_NAV are spread into NL and DA.
+const ROWS: [string, string, string, string, string][] = [
+  ['Navegación', 'Navigation', 'Navegação', 'Navigatie', 'Navigation'],
+  ['Ir a pantalla', 'Go to screen', 'Ir para ecrã', 'Naar scherm', 'Gå til skærm'],
+  ['Pausar carrusel', 'Pause carousel', 'Pausar carrossel', 'Carrousel pauzeren', 'Sæt karrusel på pause'],
+  ['Progreso del carrusel', 'Carousel progress', 'Progresso do carrossel', 'Voortgang van de carrousel', 'Karrusellens fremskridt'],
+  [
+    'Un botón que lleva a otra pantalla de casa, o de vuelta a la de siempre del dispositivo. Necesita tocar la pantalla.',
+    'A button that takes you to another screen in your home, or back to this device’s own one. Needs a touch screen.',
+    'Um botão que leva a outro ecrã da casa, ou ao ecrã inicial deste dispositivo. Precisa de ecrã tátil.',
+    'Een knop die naar een ander scherm in huis gaat, of terug naar het eigen scherm van dit apparaat. Werkt met aanraken.',
+    'En knap, der fører til en anden skærm i hjemmet, eller tilbage til enhedens egen. Kræver berøring.',
+  ],
+  [
+    'Un botón que para el carrusel en esta pantalla y lo deja seguir con otro toque.',
+    'A button that stops the carousel on this screen, and lets it go on with another tap.',
+    'Um botão que para o carrossel neste ecrã e o deixa continuar com outro toque.',
+    'Een knop die de carrousel op dit scherm stilzet en hem met nog een tik verder laat gaan.',
+    'En knap, der stopper karrusellen på denne skærm og lader den fortsætte med et tryk mere.',
+  ],
+  [
+    'Qué pantalla del carrusel se ve y cuánto le queda, con puntos o una barra fina.',
+    'Which screen of the carousel is on and how long it has left, as dots or a thin bar.',
+    'Que ecrã do carrossel se vê e quanto tempo lhe falta, com pontos ou uma barra fina.',
+    'Welk scherm van de carrousel te zien is en hoelang nog, met stippen of een dunne balk.',
+    'Hvilken skærm i karrusellen der vises, og hvor længe den er tilbage, med prikker eller en tynd bjælke.',
+  ],
+  ['Icono y texto', 'Icon and text', 'Ícone e texto', 'Pictogram en tekst', 'Ikon og tekst'],
+  ['Solo icono', 'Icon only', 'Só ícone', 'Alleen pictogram', 'Kun ikon'],
+  ['Solo texto', 'Text only', 'Só texto', 'Alleen tekst', 'Kun tekst'],
+  ['Vacío: el nombre de la pantalla.', 'Empty: the screen’s name.', 'Vazio: o nome do ecrã.', 'Leeg: de naam van het scherm.', 'Tom: skærmens navn.'],
+  ['Vacío: Pausar o Seguir.', 'Empty: Pause or Resume.', 'Vazio: Pausar ou Continuar.', 'Leeg: Pauzeren of Verder.', 'Tom: Pause eller Fortsæt.'],
+  ['Volver solo tras', 'Go back by itself after', 'Voltar sozinho após', 'Vanzelf terug na', 'Gå selv tilbage efter'],
+  ['No volver solo', 'Never by itself', 'Não voltar sozinho', 'Niet vanzelf', 'Ikke af sig selv'],
+  ['1 min sin tocar', '1 min without a touch', '1 min sem toques', '1 min zonder aanraken', '1 min uden berøring'],
+  ['2 min sin tocar', '2 min without a touch', '2 min sem toques', '2 min zonder aanraken', '2 min uden berøring'],
+  ['5 min sin tocar', '5 min without a touch', '5 min sem toques', '5 min zonder aanraken', '5 min uden berøring'],
+  ['10 min sin tocar', '10 min without a touch', '10 min sem toques', '10 min zonder aanraken', '10 min uden berøring'],
+  ['15 min sin tocar', '15 min without a touch', '15 min sem toques', '15 min zonder aanraken', '15 min uden berøring'],
+  ['30 min sin tocar', '30 min without a touch', '30 min sem toques', '30 min zonder aanraken', '30 min uden berøring'],
+  ['60 min sin tocar', '60 min without a touch', '60 min sem toques', '60 min zonder aanraken', '60 min uden berøring'],
+  [
+    'Pasado ese tiempo sin que nadie toque la pantalla, vuelve a su pantalla o a su carrusel de siempre.',
+    'Once nobody has touched the screen for that long, it goes back to its usual screen or carousel.',
+    'Passado esse tempo sem ninguém tocar no ecrã, volta ao ecrã ou ao carrossel de sempre.',
+    'Als niemand het scherm zo lang heeft aangeraakt, gaat het terug naar het gewone scherm of de gewone carrousel.',
+    'Når ingen har rørt skærmen så længe, går den tilbage til sin sædvanlige skærm eller karrusel.',
+  ],
+  [
+    'Si la pantalla de destino está en el carrusel de este dispositivo, salta a ella y el carrusel sigue desde ahí. Si no, la muestra y se queda en ella.',
+    'If the screen is in this device’s carousel, the carousel jumps to it and goes on from there. If not, the device shows it and stays on it.',
+    'Se o ecrã de destino estiver no carrossel deste dispositivo, salta para ele e o carrossel continua daí. Se não, mostra-o e fica nele.',
+    'Staat het scherm in de carrousel van dit apparaat, dan springt de carrousel erheen en gaat vanaf daar verder. Zo niet, dan toont het apparaat het en blijft daar.',
+    'Hvis skærmen er i enhedens karrusel, springer karrusellen til den og fortsætter derfra. Ellers viser enheden den og bliver der.',
+  ],
+  [
+    'Solo se ve en los dispositivos que muestran un carrusel.',
+    'Only shows on devices that run a carousel.',
+    'Só aparece nos dispositivos que mostram um carrossel.',
+    'Alleen te zien op apparaten die een carrousel tonen.',
+    'Vises kun på enheder, der kører en karrusel.',
+  ],
+  ['Nombre de la pantalla', 'Screen name', 'Nome do ecrã', 'Naam van het scherm', 'Skærmens navn'],
+  ['Tiempo que queda', 'Time left', 'Tempo que falta', 'Resterende tijd', 'Tid tilbage'],
+  [
+    'Solo se ve en los dispositivos que muestran un carrusel. No hace falta tocar la pantalla.',
+    'Only shows on devices that run a carousel. It does not need a touch screen.',
+    'Só aparece nos dispositivos que mostram um carrossel. Não precisa de ecrã tátil.',
+    'Alleen te zien op apparaten die een carrousel tonen. Aanraken is niet nodig.',
+    'Vises kun på enheder, der kører en karrusel. Kræver ikke berøring.',
+  ],
+  ['Elige a qué pantalla lleva el botón.', 'Choose which screen the button goes to.', 'Escolhe para que ecrã o botão leva.', 'Kies naar welk scherm de knop gaat.', 'Vælg, hvilken skærm knappen fører til.'],
+  [
+    'La pantalla o el carrusel que el dispositivo muestra siempre.',
+    'The screen or carousel the device usually shows.',
+    'O ecrã ou o carrossel que o dispositivo mostra sempre.',
+    'Het scherm of de carrousel die het apparaat normaal toont.',
+    'Den skærm eller karrusel, enheden normalt viser.',
+  ],
+  ['Inicio (la de siempre del dispositivo)', 'Home (the device’s usual one)', 'Início (o de sempre do dispositivo)', 'Start (het gewone van het apparaat)', 'Start (enhedens sædvanlige)'],
+  ['{name} (esta pantalla)', '{name} (this screen)', '{name} (este ecrã)', '{name} (dit scherm)', '{name} (denne skærm)'],
+  [
+    'Sin icono: el de siempre (una flecha, o la casa para Inicio).',
+    'No icon: the usual one (an arrow, or the house for Home).',
+    'Sem ícone: o de sempre (uma seta, ou a casa para Início).',
+    'Geen pictogram: het gewone (een pijl, of het huisje voor Start).',
+    'Intet ikon: det sædvanlige (en pil, eller huset for Start).',
+  ],
+  ['Sin icono: el de siempre.', 'No icon: the usual one.', 'Sem ícone: o de sempre.', 'Geen pictogram: het gewone.', 'Intet ikon: det sædvanlige.'],
+  ['Elige la pantalla', 'Pick the screen', 'Escolhe o ecrã', 'Kies het scherm', 'Vælg skærmen'],
+  // the page settings: touch, the swipe, the animated background
+  [
+    'Para los controles de Home Assistant, los botones de Navegación y deslizar entre pantallas.',
+    'For the Home Assistant controls, the Navigation buttons and swiping between screens.',
+    'Para os controlos do Home Assistant, os botões de Navegação e deslizar entre ecrãs.',
+    'Voor de Home Assistant-bediening, de Navigatie-knoppen en vegen tussen schermen.',
+    'Til Home Assistant-styringen, Navigation-knapperne og at stryge mellem skærme.',
+  ],
+  ['Deslizar para cambiar de pantalla', 'Swipe to change screen', 'Deslizar para mudar de ecrã', 'Vegen om van scherm te wisselen', 'Stryg for at skifte skærm'],
+  [
+    'En un carrusel, deslizar el dedo a la izquierda o a la derecha pasa a la pantalla siguiente o a la anterior.',
+    'On a carousel, swiping left or right goes to the next or the previous screen.',
+    'Num carrossel, deslizar o dedo para a esquerda ou para a direita passa para o ecrã seguinte ou para o anterior.',
+    'In een carrousel ga je met vegen naar links of rechts naar het volgende of het vorige scherm.',
+    'I en karrusel går et stryg til venstre eller højre til den næste eller den forrige skærm.',
+  ],
+  [
+    'Este botón no se ve en la pantalla mientras no se pueda tocar.',
+    'This button does not show on the screen until touch is allowed.',
+    'Este botão não aparece no ecrã enquanto não se puder tocar.',
+    'Deze knop is niet te zien zolang aanraken niet is toegestaan.',
+    'Knappen vises ikke på skærmen, før berøring er tilladt.',
+  ],
+  ['Sin tocar', 'No touch', 'Sem toque', 'Geen aanraken', 'Ingen berøring'],
+  [
+    'No se ve en la pantalla: activa «Permitir tocar en la pantalla» en Página.',
+    'Not on the screen: turn on “Allow touch on the screen” in Page.',
+    'Não aparece no ecrã: ativa «Permitir tocar no ecrã» em Página.',
+    'Niet op het scherm: zet ‘Aanraken op het scherm toestaan’ aan bij Pagina.',
+    'Vises ikke på skærmen: slå »Tillad berøring på skærmen« til under Side.',
+  ],
+  [
+    'La animación (aurora, partículas) se elige en Fondo, en Efecto ambiental.',
+    'The animation (aurora, particles) is chosen in Background, under Ambient effect.',
+    'A animação (aurora, partículas) escolhe-se em Fundo, em Efeito ambiente.',
+    'De animatie (noorderlicht, deeltjes) kies je bij Achtergrond, onder Sfeereffect.',
+    'Animationen (nordlys, partikler) vælges under Baggrund, i Stemningseffekt.',
+  ],
+  ['Ir a Efecto ambiental', 'Go to Ambient effect', 'Ir para Efeito ambiente', 'Naar Sfeereffect', 'Gå til Stemningseffekt'],
+  [
+    'Salir del kiosko',
+    'Exit kiosk',
+    'Sair do quiosque',
+    'Kiosk afsluiten',
+    'Afslut kiosk',
+  ],
+  [
+    'Apagar',
+    'Shut down',
+    'Desligar',
+    'Uitschakelen',
+    'Sluk',
+  ],
+  [
+    'Dos toques cierran el navegador de pantalla completa del Pi que ejecuta Marco.',
+    'Two taps close the full screen browser on the Pi that runs Marco.',
+    'Dois toques fecham o navegador em ecrã inteiro do Pi que executa o Marco.',
+    'Twee tikken sluiten de schermvullende browser op de Pi waarop Marco draait.',
+    'To tryk lukker fuldskærmsbrowseren på den Pi, der kører Marco.',
+  ],
+  [
+    'Dos toques apagan el Pi que ejecuta Marco, si lo activas en el Pi.',
+    'Two taps shut down the Pi that runs Marco, once you turn it on there.',
+    'Dois toques desligam o Pi que executa o Marco, se o ativar no Pi.',
+    'Twee tikken schakelen de Pi met Marco uit, als je dat op de Pi aanzet.',
+    'To tryk slukker den Pi, der kører Marco, hvis du slår det til på Pi’en.',
+  ],
+  [
+    'Vacío: Salir del kiosko.',
+    'Empty: Exit kiosk.',
+    'Vazio: Sair do quiosque.',
+    'Leeg: Kiosk afsluiten.',
+    'Tom: Afslut kiosk.',
+  ],
+  [
+    'Vacío: Apagar.',
+    'Empty: Shut down.',
+    'Vazio: Desligar.',
+    'Leeg: Uitschakelen.',
+    'Tom: Sluk.',
+  ],
+  [
+    'Cierra el navegador de pantalla completa del Pi que ejecuta Marco. Vuelve al reiniciar, al entrar otra vez en el escritorio, desde el menú del Pi (Marco) o con el comando marco kiosk. Pide un segundo toque.',
+    'Closes the full screen browser on the Pi that runs Marco. It comes back after a restart, at the next desktop login, from the Pi’s menu (Marco) or with the command marco kiosk. It asks for a second tap.',
+    'Fecha o navegador em ecrã inteiro do Pi que executa o Marco. Volta ao reiniciar, ao entrar outra vez no ambiente de trabalho, pelo menu do Pi (Marco) ou com o comando marco kiosk. Pede um segundo toque.',
+    'Sluit de schermvullende browser op de Pi waarop Marco draait. Hij komt terug na een herstart, bij de volgende aanmelding op het bureaublad, via het menu van de Pi (Marco) of met de opdracht marco kiosk. Vraagt om een tweede tik.',
+    'Lukker fuldskærmsbrowseren på den Pi, der kører Marco. Den kommer igen efter en genstart, ved næste login på skrivebordet, fra Pi’ens menu (Marco) eller med kommandoen marco kiosk. Beder om et tryk mere.',
+  ],
+  [
+    'Apaga el Pi que ejecuta Marco. Antes hay que activarlo en el Pi con: sudo marco power on. Pide un segundo toque.',
+    'Shuts down the Pi that runs Marco. First turn it on there with: sudo marco power on. It asks for a second tap.',
+    'Desliga o Pi que executa o Marco. Antes é preciso ativá-lo no Pi com: sudo marco power on. Pede um segundo toque.',
+    'Schakelt de Pi uit waarop Marco draait. Zet het eerst aan op de Pi met: sudo marco power on. Vraagt om een tweede tik.',
+    'Slukker den Pi, der kører Marco. Slå det først til på Pi’en med: sudo marco power on. Beder om et tryk mere.',
+  ],
+  [
+    'Solo funciona en el kiosko del Pi que ejecuta Marco, el navegador de pantalla completa que abre el instalador. Necesita Permitir tocar en la pantalla.',
+    'Only works in the kiosk of the Pi that runs Marco, the full screen browser the installer sets up. Needs Allow touch on the screen.',
+    'Só funciona no quiosque do Pi que executa o Marco, o navegador em ecrã inteiro que o instalador configura. Precisa de Permitir tocar no ecrã.',
+    'Werkt alleen in de kiosk van de Pi waarop Marco draait, de schermvullende browser die het installatieprogramma instelt. Vereist ‘Aanraken op het scherm toestaan’.',
+    'Virker kun i kiosken på den Pi, der kører Marco, den fuldskærmsbrowser som installationsprogrammet sætter op. Kræver »Tillad berøring på skærmen«.',
+  ],
+  [
+    'Cierre del kiosko pedido desde la pantalla {screen}',
+    'Kiosk exit requested from screen {screen}',
+    'Saída do quiosque pedida a partir do ecrã {screen}',
+    'Kiosk afsluiten gevraagd vanaf het scherm {screen}',
+    'Lukning af kiosken anmodet fra skærmen {screen}',
+  ],
+  [
+    'Apagado pedido desde la pantalla {screen}',
+    'Shutdown requested from screen {screen}',
+    'Desligar pedido a partir do ecrã {screen}',
+    'Uitschakelen gevraagd vanaf het scherm {screen}',
+    'Slukning anmodet fra skærmen {screen}',
+  ],
+];
+
+export const ROWS_NAV: [string, string, string][] = ROWS.map(([es, en, pt]) => [es, en, pt]);
+export const NL_NAV: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[3]]));
+export const DA_NAV: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[4]]));
+
 export const DE_NAV: Record<string, string> = {
   'Navegación': 'Navigation',
   'Ir a pantalla': 'Zu Bildschirm wechseln',
   'Pausar carrusel': 'Karussell pausieren',
   'Progreso del carrusel': 'Karussell-Fortschritt',
-  'Un botón que lleva a otra pantalla de casa, o de vuelta a la de siempre del dispositivo. Necesita tocar la pantalla.': 'Eine Taste, die zu einem anderen Bildschirm im Haus führt oder zurück zum Standardbildschirm dieses Geräts. Erfordert einen Touchscreen.',
-  'Un botón que para el carrusel en esta pantalla y lo deja seguir con otro toque.': 'Eine Taste, die das Karussell auf diesem Bildschirm anhält und es mit einem weiteren Tippen fortsetzt.',
-  'Qué pantalla del carrusel se ve y cuánto le queda, con puntos o una barra fina.': 'Zeigt mit Punkten oder einem dünnen Balken, welcher Bildschirm im Karussell gerade läuft und wie lange er noch sichtbar bleibt.',
+  'Un botón que lleva a otra pantalla de casa, o de vuelta a la de siempre del dispositivo. Necesita tocar la pantalla.':
+    'Eine Schaltfläche, die zu einem anderen Bildschirm im Haus führt oder zurück zum gewohnten Bildschirm dieses Geräts. Erfordert Tippen auf den Bildschirm.',
+  'Un botón que para el carrusel en esta pantalla y lo deja seguir con otro toque.':
+    'Eine Schaltfläche, die das Karussell auf diesem Bildschirm anhält und es mit einem weiteren Tippen fortsetzt.',
+  'Qué pantalla del carrusel se ve y cuánto le queda, con puntos o una barra fina.':
+    'Welcher Bildschirm des Karussells gerade angezeigt wird und wie viel Zeit ihm noch bleibt, mit Punkten oder einer dünnen Leiste.',
   'Icono y texto': 'Symbol und Text',
   'Solo icono': 'Nur Symbol',
   'Solo texto': 'Nur Text',
-  'Vacío: el nombre de la pantalla.': 'Leer: Name des Bildschirms.',
+  'Vacío: el nombre de la pantalla.': 'Leer: der Name des Bildschirms.',
   'Vacío: Pausar o Seguir.': 'Leer: Pausieren oder Fortsetzen.',
   'Volver solo tras': 'Automatisch zurück nach',
-  'No volver solo': 'Nie automatisch zurück',
+  'No volver solo': 'Nie automatisch',
   '1 min sin tocar': '1 Min. ohne Berührung',
   '2 min sin tocar': '2 Min. ohne Berührung',
   '5 min sin tocar': '5 Min. ohne Berührung',
@@ -23,40 +237,55 @@ export const DE_NAV: Record<string, string> = {
   '15 min sin tocar': '15 Min. ohne Berührung',
   '30 min sin tocar': '30 Min. ohne Berührung',
   '60 min sin tocar': '60 Min. ohne Berührung',
-  'Pasado ese tiempo sin que nadie toque la pantalla, vuelve a su pantalla o a su carrusel de siempre.': 'Wird der Bildschirm so lange nicht berührt, kehrt er zu seinem üblichen Bildschirm oder Karussell zurück.',
-  'Si la pantalla de destino está en el carrusel de este dispositivo, salta a ella y el carrusel sigue desde ahí. Si no, la muestra y se queda en ella.': 'Liegt der Zielbildschirm im Karussell dieses Geräts, springt das Karussell dorthin und läuft von dort weiter. Andernfalls wird er angezeigt und bleibt stehen.',
-  'Solo se ve en los dispositivos que muestran un carrusel.': 'Wird nur auf Geräten angezeigt, auf denen ein Karussell läuft.',
+  'Pasado ese tiempo sin que nadie toque la pantalla, vuelve a su pantalla o a su carrusel de siempre.':
+    'Wenn niemand den Bildschirm so lange berührt hat, kehrt er zu seinem gewohnten Bildschirm oder Karussell zurück.',
+  'Si la pantalla de destino está en el carrusel de este dispositivo, salta a ella y el carrusel sigue desde ahí. Si no, la muestra y se queda en ella.':
+    'Wenn sich der Zielbildschirm im Karussell dieses Geräts befindet, springt das Karussell dorthin und läuft von dort weiter. Andernfalls zeigt das Gerät ihn an und bleibt darauf.',
+  'Solo se ve en los dispositivos que muestran un carrusel.':
+    'Wird nur auf Geräten angezeigt, auf denen ein Karussell läuft.',
   'Nombre de la pantalla': 'Bildschirmname',
   'Tiempo que queda': 'Verbleibende Zeit',
-  'Solo se ve en los dispositivos que muestran un carrusel. No hace falta tocar la pantalla.': 'Wird nur auf Geräten angezeigt, auf denen ein Karussell läuft. Kein Touchscreen erforderlich.',
-  'Elige a qué pantalla lleva el botón.': 'Wähle, zu welchem Bildschirm die Taste führt.',
-  'La pantalla o el carrusel que el dispositivo muestra siempre.': 'Der Bildschirm oder das Karussell, den bzw. das das Gerät normalerweise anzeigt.',
-  'Inicio (la de siempre del dispositivo)': 'Start (Standard des Geräts)',
+  'Solo se ve en los dispositivos que muestran un carrusel. No hace falta tocar la pantalla.':
+    'Wird nur auf Geräten angezeigt, auf denen ein Karussell läuft. Tippen auf den Bildschirm ist nicht erforderlich.',
+  'Elige a qué pantalla lleva el botón.':
+    'Wähle aus, zu welchem Bildschirm die Schaltfläche führt.',
+  'La pantalla o el carrusel que el dispositivo muestra siempre.':
+    'Der Bildschirm oder das Karussell, das das Gerät normalerweise anzeigt.',
+  'Inicio (la de siempre del dispositivo)': 'Start (der gewohnte Bildschirm des Geräts)',
   '{name} (esta pantalla)': '{name} (dieser Bildschirm)',
-  'Sin icono: el de siempre (una flecha, o la casa para Inicio).': 'Kein Symbol: das Standardsymbol (ein Pfeil oder das Haus für Start).',
-  'Sin icono: el de siempre.': 'Kein Symbol: das Standardsymbol.',
+  'Sin icono: el de siempre (una flecha, o la casa para Inicio).':
+    'Kein Symbol: das gewohnte (ein Pfeil oder das Haus für Start).',
+  'Sin icono: el de siempre.': 'Kein Symbol: das gewohnte.',
   'Elige la pantalla': 'Bildschirm auswählen',
-  'Para los controles de Home Assistant, los botones de Navegación y deslizar entre pantallas.': 'Für Home-Assistant-Steuerungen, Navigationstasten und das Wischen zwischen Bildschirmen.',
-  'Deslizar para cambiar de pantalla': 'Wischen zum Bildschirmwechsel',
-  'En un carrusel, deslizar el dedo a la izquierda o a la derecha pasa a la pantalla siguiente o a la anterior.': 'In einem Karussell wechselt ein Wischen nach links oder rechts zum nächsten oder vorherigen Bildschirm.',
-  'Este botón no se ve en la pantalla mientras no se pueda tocar.': 'Diese Taste wird auf dem Bildschirm nicht angezeigt, solange Berührungen nicht erlaubt sind.',
-  'Sin tocar': 'Keine Berührung',
-  'No se ve en la pantalla: activa «Permitir tocar en la pantalla» en Página.': 'Nicht auf dem Bildschirm sichtbar: Aktiviere „Berühren des Bildschirms erlauben“ unter Seite.',
-  'La animación (aurora, partículas) se elige en Fondo, en Efecto ambiental.': 'Die Animation (Aurora, Partikel) wird unter Hintergrund bei Umgebungseffekt ausgewählt.',
+  'Para los controles de Home Assistant, los botones de Navegación y deslizar entre pantallas.':
+    'Für die Home Assistant-Steuerelemente, die Navigationsschaltflächen und das Wischen zwischen Bildschirmen.',
+  'Deslizar para cambiar de pantalla': 'Wischen zum Wechseln des Bildschirms',
+  'En un carrusel, deslizar el dedo a la izquierda o a la derecha pasa a la pantalla siguiente o a la anterior.':
+    'In einem Karussell wechselt ein Wischen nach links oder rechts zum nächsten oder vorherigen Bildschirm.',
+  'Este botón no se ve en la pantalla mientras no se pueda tocar.':
+    'Diese Schaltfläche ist auf dem Bildschirm nicht sichtbar, solange Tippen nicht erlaubt ist.',
+  'Sin tocar': 'Ohne Berührung',
+  'No se ve en la pantalla: activa «Permitir tocar en la pantalla» en Página.':
+    'Auf dem Bildschirm nicht sichtbar: Aktiviere „Tippen auf dem Bildschirm erlauben“ unter Seite.',
+  'La animación (aurora, partículas) se elige en Fondo, en Efecto ambiental.':
+    'Die Animation (Polarlicht, Partikel) wird unter Hintergrund bei Umgebungseffekt ausgewählt.',
   'Ir a Efecto ambiental': 'Zu Umgebungseffekt',
   'Salir del kiosko': 'Kiosk beenden',
-  'Apagar': 'Ausschalten',
-  'Dos toques cierran el navegador de pantalla completa del Pi que ejecuta Marco.': 'Zweimaliges Tippen schließt den Vollbildbrowser auf dem Pi, auf dem Marco läuft.',
-  'Dos toques apagan el Pi que ejecuta Marco, si lo activas en el Pi.': 'Zweimaliges Tippen fährt den Pi herunter, auf dem Marco läuft, sofern dies auf dem Pi aktiviert wurde.',
+  'Apagar': 'Herunterfahren',
+  'Dos toques cierran el navegador de pantalla completa del Pi que ejecuta Marco.':
+    'Zweimaliges Tippen schließt den Vollbildbrowser auf dem Pi, auf dem Marco läuft.',
+  'Dos toques apagan el Pi que ejecuta Marco, si lo activas en el Pi.':
+    'Zweimaliges Tippen fährt den Pi herunter, auf dem Marco läuft, sobald du dies auf dem Pi aktiviert hast.',
   'Vacío: Salir del kiosko.': 'Leer: Kiosk beenden.',
-  'Vacío: Apagar.': 'Leer: Ausschalten.',
-  'Cierra el navegador de pantalla completa del Pi que ejecuta Marco. Vuelve al reiniciar, al entrar otra vez en el escritorio, desde el menú del Pi (Marco) o con el comando marco kiosk. Pide un segundo toque.': 'Schließt den Vollbildbrowser auf dem Pi, auf dem Marco läuft. Er startet nach einem Neustart, bei der nächsten Desktop-Anmeldung, über das Pi-Menü (Marco) oder mit dem Befehl marco kiosk wieder. Erfordert ein zweites Tippen.',
-  'Apaga el Pi que ejecuta Marco. Antes hay que activarlo en el Pi con: sudo marco power on. Pide un segundo toque.': 'Fährt den Pi herunter, auf dem Marco läuft. Muss zuvor auf dem Pi mit „sudo marco power on“ aktiviert werden. Erfordert ein zweites Tippen.',
-  'Solo funciona en el kiosko del Pi que ejecuta Marco, el navegador de pantalla completa que abre el instalador. Necesita Permitir tocar en la pantalla.': 'Funktioniert nur im Kiosk des Pi, auf dem Marco läuft (dem vom Installer eingerichteten Vollbildbrowser). Erfordert „Berühren des Bildschirms erlauben“.',
-  'Cierre del kiosko pedido desde la pantalla {screen}': 'Beenden des Kiosks über Bildschirm {screen} angefordert',
-  'Apagado pedido desde la pantalla {screen}': 'Herunterfahren über Bildschirm {screen} angefordert',
-];
-
-export const ROWS_NAV: [string, string, string][] = ROWS.map(([es, en, pt]) => [es, en, pt]);
-export const NL_NAV: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[3]]));
-export const DA_NAV: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[4]]));
+  'Vacío: Apagar.': 'Leer: Herunterfahren.',
+  'Cierra el navegador de pantalla completa del Pi que ejecuta Marco. Vuelve al reiniciar, al entrar otra vez en el escritorio, desde el menú del Pi (Marco) o con el comando marco kiosk. Pide un segundo toque.':
+    'Schließt den Vollbildbrowser auf dem Pi, auf dem Marco läuft. Er startet nach einem Neustart, bei der nächsten Desktop-Anmeldung, über das Menü des Pi (Marco) oder mit dem Befehl marco kiosk erneut. Verlangt ein zweites Tippen.',
+  'Apaga el Pi que ejecuta Marco. Antes hay que activarlo en el Pi con: sudo marco power on. Pide un segundo toque.':
+    'Fährt den Pi herunter, auf dem Marco läuft. Aktiviere dies vorher auf dem Pi mit: sudo marco power on. Verlangt ein zweites Tippen.',
+  'Solo funciona en el kiosko del Pi que ejecuta Marco, el navegador de pantalla completa que abre el instalador. Necesita Permitir tocar en la pantalla.':
+    'Funktioniert nur im Kiosk des Pi, auf dem Marco läuft, dem Vollbildbrowser, den das Installationsprogramm einrichtet. Erfordert Tippen auf dem Bildschirm erlauben.',
+  'Cierre del kiosko pedido desde la pantalla {screen}':
+    'Beenden des Kiosks über Bildschirm {screen} angefordert',
+  'Apagado pedido desde la pantalla {screen}':
+    'Herunterfahren über Bildschirm {screen} angefordert',
+};
