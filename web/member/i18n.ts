@@ -1,17 +1,11 @@
 import type { Lang } from '../shared/types';
-import { ROWS_ACCESS_ALL } from '../admin/i18n-dict-access';
+import { DE_ACCESS, ROWS_ACCESS_ALL } from '../admin/i18n-dict-access';
 
-/**
- * The phone dashboard's texts: only the family access rows (keeps the page small). Same rules as the admin's t():
- * the Spanish string is the key and `{name}` placeholders come from `vars`. A missing key falls back to English.
- */
-// Column of each language in ROWS_ACCESS_ALL. Every language of Lang must have one (tsc says so when a new one is
-// added); shared/i18n.ts is not imported for its LANGS, so the page does not load the screens' dictionary.
-const COLUMN: { [K in Exclude<Lang, 'es'>]: number } & Record<string, number> = { en: 1, pt: 2, nl: 3, da: 4, pl: 5, de: 6 };
-const LANGS = ['es', ...Object.keys(COLUMN)] as Lang[];
-const DICTS: Partial<Record<Lang, Record<string, string>>> = {};
+const COLUMN: { [K in Exclude<Lang, 'es' | 'de'>]: number } & Record<string, number> = { en: 1, pt: 2, nl: 3, da: 4, pl: 5 };
+const LANGS = ['es', ...Object.keys(COLUMN), 'de'] as Lang[];
+const DICTS: Partial<Record<Lang, Record<string, string>>> = { de: DE_ACCESS };
 for (const l of LANGS) {
-  if (l === 'es') continue;
+  if (l === 'es' || l === 'de') continue;
   const d: Record<string, string> = {};
   for (const row of ROWS_ACCESS_ALL) if (row[COLUMN[l]]) d[row[0]] ??= row[COLUMN[l]];
   DICTS[l] = d;
